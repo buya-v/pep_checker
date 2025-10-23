@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_pep_standard_tree" model="ir.ui.view">
+        <field name="name">pep.standard.tree</field>
+        <field name="model">pep.standard</field>
+        <field name="arch" type="xml">
+            <tree string="PEP Standards">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="type"/>
+                <field name="status"/>
+                <field name="creation_date"/>
+                <field name="author"/>
+                <field name="python_version"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pep_standard_form" model="ir.ui.view">
+        <field name="name">pep.standard.form</field>
+        <field name="model">pep.standard</field>
+        <field name="arch" type="xml">
+            <form string="PEP Standard">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(website_url)d" type="action" 
+                                class="oe_stat_button" icon="fa-globe"
+                                string="View on python.org"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="title"/>
+                            <field name="type"/>
+                            <field name="status"/>
+                        </group>
+                        <group>
+                            <field name="creation_date"/>
+                            <field name="author"/>
+                            <field name="python_version"/>
+                            <field name="url" widget="url"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_pep_standard_search" model="ir.ui.view">
+        <field name="name">pep.standard.search</field>
+        <field name="model">pep.standard</field>
+        <field name="arch" type="xml">
+            <search string="Search PEP Standards">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="author"/>
+                <field name="type"/>
+                <field name="status"/>
+                <field name="python_version"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_by_type" context="{'group_by': 'type'}"/>
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="Python Version" name="group_by_python_version" context="{'group_by': 'python_version'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_pep_standard" model="ir.actions.act_window">
+        <field name="name">PEP Standards</field>
+        <field name="res_model">pep.standard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_pep_standard_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PEP Standard
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_pep_root" 
+              name="PEP Standards" 
+              sequence="10"/>
+
+    <menuitem id="menu_pep_standard"
+              name="PEP Standards"
+              parent="menu_pep_root"
+              action="action_pep_standard"
+              sequence="10"/>
