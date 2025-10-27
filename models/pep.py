@@ -1,5 +1,4 @@
 from odoo import models, fields, api
-from datetime import datetime
 
 class PEPPerson(models.Model):
     _name = 'pep.person'

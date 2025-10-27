@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_pep_person_user,PEP Person User Access,model_pep_person,base.group_user,1,1,1,1
-access_pep_screening_user,PEP Screening User Access,model_pep_screening,base.group_user,1,1,1,1
+access_pep_person_user,PEP Person User Access,model_pep_person,pep_checker.group_pep_user,1,1,1,0
+access_pep_person_manager,PEP Person Manager Access,model_pep_person,pep_checker.group_pep_manager,1,1,1,1
+access_pep_screening_user,PEP Screening User Access,model_pep_screening,pep_checker.group_pep_user,1,1,1,0
+access_pep_screening_manager,PEP Screening Manager Access,model_pep_screening,pep_checker.group_pep_manager,1,1,1,1

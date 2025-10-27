@@ -1,51 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Tree View -->
-    <record id="view_pep_standard_tree" model="ir.ui.view">
-        <field name="name">pep.standard.tree</field>
-        <field name="model">pep.standard</field>
+    <!-- PEP Person Tree View -->
+    <record id="view_pep_person_tree" model="ir.ui.view">
+        <field name="name">pep.person.tree</field>
+        <field name="model">pep.person</field>
         <field name="arch" type="xml">
-            <tree string="PEP Standards">
+            <list string="PEP Persons">
                 <field name="name"/>
-                <field name="title"/>
-                <field name="type"/>
+                <field name="position"/>
+                <field name="organization"/>
+                <field name="pep_type"/>
                 <field name="status"/>
-                <field name="creation_date"/>
-                <field name="author"/>
-                <field name="python_version"/>
-            </tree>
+                <field name="risk_level"/>
+                <field name="last_checked"/>
+            </list>
         </field>
     </record>
 
-    <!-- Form View -->
-    <record id="view_pep_standard_form" model="ir.ui.view">
-        <field name="name">pep.standard.form</field>
-        <field name="model">pep.standard</field>
+    <!-- PEP Person Form View -->
+    <record id="view_pep_person_form" model="ir.ui.view">
+        <field name="name">pep.person.form</field>
+        <field name="model">pep.person</field>
         <field name="arch" type="xml">
-            <form string="PEP Standard">
+            <form string="PEP Person" js_class="pep_person_form">
+                <field name="message_follower_ids" invisible="1"/>
+                <field name="activity_ids" invisible="1"/>
+                <field name="message_ids" invisible="1"/>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="%(website_url)d" type="action" 
-                                class="oe_stat_button" icon="fa-globe"
-                                string="View on python.org"/>
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
                     </div>
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="title"/>
-                            <field name="type"/>
-                            <field name="status"/>
+                            <field name="date_of_birth"/>
+                            <field name="nationality"/>
+                            <field name="pep_type"/>
                         </group>
                         <group>
-                            <field name="creation_date"/>
-                            <field name="author"/>
-                            <field name="python_version"/>
-                            <field name="url" widget="url"/>
+                            <field name="position"/>
+                            <field name="organization"/>
+                            <field name="status"/>
+                            <field name="risk_level"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="last_checked"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Description">
-                            <field name="description"/>
+                        <page string="Additional Information">
+                            <group>
+                                <field name="source"/>
+                                <field name="notes"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -53,47 +70,150 @@
         </field>
     </record>
 
-    <!-- Search View -->
-    <record id="view_pep_standard_search" model="ir.ui.view">
-        <field name="name">pep.standard.search</field>
-        <field name="model">pep.standard</field>
+    <!-- PEP Person Search View -->
+    <record id="view_pep_person_search" model="ir.ui.view">
+        <field name="name">pep.person.search</field>
+        <field name="model">pep.person</field>
         <field name="arch" type="xml">
-            <search string="Search PEP Standards">
+            <search string="Search PEP Persons">
                 <field name="name"/>
-                <field name="title"/>
-                <field name="author"/>
-                <field name="type"/>
-                <field name="status"/>
-                <field name="python_version"/>
+                <field name="position"/>
+                <field name="organization"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Domestic PEPs" name="domestic" domain="[('pep_type', '=', 'domestic')]"/>
+                <filter string="Foreign PEPs" name="foreign" domain="[('pep_type', '=', 'foreign')]"/>
+                <filter string="International PEPs" name="international" domain="[('pep_type', '=', 'international')]"/>
+                <filter string="Related Persons" name="related" domain="[('pep_type', '=', 'related')]"/>
                 <group expand="0" string="Group By">
-                    <filter string="Type" name="group_by_type" context="{'group_by': 'type'}"/>
+                    <filter string="PEP Type" name="group_by_type" context="{'group_by': 'pep_type'}"/>
                     <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
-                    <filter string="Python Version" name="group_by_python_version" context="{'group_by': 'python_version'}"/>
+                    <filter string="Risk Level" name="group_by_risk" context="{'group_by': 'risk_level'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- Action -->
-    <record id="action_pep_standard" model="ir.actions.act_window">
-        <field name="name">PEP Standards</field>
-        <field name="res_model">pep.standard</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_pep_standard_search"/>
+    <!-- PEP Screening Tree View -->
+    <record id="view_pep_screening_tree" model="ir.ui.view">
+        <field name="name">pep.screening.tree</field>
+        <field name="model">pep.screening</field>
+        <field name="arch" type="xml">
+            <list string="PEP Screenings">
+                <field name="name"/>
+                <field name="screening_date"/>
+                <field name="result"/>
+                <field name="matched_pep_id"/>
+                <field name="confidence_score"/>
+                <field name="screened_by"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PEP Screening Form View -->
+    <record id="view_pep_screening_form" model="ir.ui.view">
+        <field name="name">pep.screening.form</field>
+        <field name="model">pep.screening</field>
+        <field name="arch" type="xml">
+            <form string="PEP Screening" js_class="pep_screening_form">
+                <field name="message_follower_ids" invisible="1"/>
+                <field name="activity_ids" invisible="1"/>
+                <field name="message_ids" invisible="1"/>
+                <header>
+                    <button name="action_screen_name" string="Screen Name" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date_of_birth"/>
+                            <field name="nationality"/>
+                        </group>
+                        <group>
+                            <field name="screening_date"/>
+                            <field name="screened_by"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="result"/>
+                            <field name="matched_pep_id" invisible="result == 'no_match'"/>
+                            <field name="confidence_score" widget="percentage" invisible="result == 'no_match'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PEP Screening Search View -->
+    <record id="view_pep_screening_search" model="ir.ui.view">
+        <field name="name">pep.screening.search</field>
+        <field name="model">pep.screening</field>
+        <field name="arch" type="xml">
+            <search string="Search PEP Screenings">
+                <field name="name"/>
+                <field name="matched_pep_id"/>
+                <field name="screened_by"/>
+                <separator/>
+                <filter string="Match Found" name="match" domain="[('result', '=', 'match')]"/>
+                <filter string="Possible Match" name="possible" domain="[('result', '=', 'possible')]"/>
+                <filter string="No Match" name="no_match" domain="[('result', '=', 'no_match')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Result" name="group_by_result" context="{'group_by': 'result'}"/>
+                    <filter string="Screened By" name="group_by_user" context="{'group_by': 'screened_by'}"/>
+                    <filter string="Screening Date" name="group_by_date" context="{'group_by': 'screening_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_pep_person" model="ir.actions.act_window">
+        <field name="name">PEP Persons</field>
+        <field name="res_model">pep.person</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_pep_person_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Create your first PEP Standard
+                Create your first PEP Person
+            </p>
+        </field>
+    </record>
+
+    <record id="action_pep_screening" model="ir.actions.act_window">
+        <field name="name">PEP Screenings</field>
+        <field name="res_model">pep.screening</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_pep_screening_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PEP Screening
             </p>
         </field>
     </record>
 
     <!-- Menu Items -->
     <menuitem id="menu_pep_root" 
-              name="PEP Standards" 
+              name="PEP Checker" 
               sequence="10"/>
 
-    <menuitem id="menu_pep_standard"
-              name="PEP Standards"
+    <menuitem id="menu_pep_persons"
+              name="PEP Persons"
               parent="menu_pep_root"
-              action="action_pep_standard"
+              action="action_pep_person"
               sequence="10"/>
+
+    <menuitem id="menu_pep_screenings"
+              name="PEP Screenings"
+              parent="menu_pep_root"
+              action="action_pep_screening"
+              sequence="20"/>
+</odoo>

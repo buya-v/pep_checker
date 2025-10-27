@@ -17,6 +17,7 @@
         'mail',
     ],
     'data': [
+        'security/pep_security.xml',
         'security/ir.model.access.csv',
         'views/pep_views.xml',
     ],
