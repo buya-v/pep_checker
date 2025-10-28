@@ -26,6 +26,14 @@
                 <field name="message_follower_ids" invisible="1"/>
                 <field name="activity_ids" invisible="1"/>
                 <field name="message_ids" invisible="1"/>
+                <header>
+                    <button name="action_request_approval" string="Request Approval" 
+                            type="object" class="oe_highlight"
+                            invisible="senior_approval_id"/>
+                    <button name="action_schedule_edd_review" string="Schedule EDD Review" 
+                            type="object" class="oe_highlight"/>
+                    <field name="edd_status" widget="statusbar"/>
+                </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button name="toggle_active" type="object"
@@ -34,31 +42,57 @@
                                 options='{"terminology": "archive"}'/>
                         </button>
                     </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Full Name"/></h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="name"/>
                             <field name="date_of_birth"/>
                             <field name="nationality"/>
                             <field name="pep_type"/>
+                            <field name="status"/>
                         </group>
                         <group>
                             <field name="position"/>
+                            <field name="custom_position" invisible="position != 'other'"/>
                             <field name="organization"/>
-                            <field name="status"/>
+                            <field name="organization_type"/>
                             <field name="risk_level"/>
                         </group>
                     </group>
                     <group>
-                        <group>
+                        <group string="Position Timeline">
                             <field name="start_date"/>
                             <field name="end_date"/>
-                        </group>
-                        <group>
                             <field name="last_checked"/>
+                        </group>
+                        <group string="Enhanced Due Diligence">
+                            <field name="monitoring_frequency"/>
+                            <field name="edd_last_review"/>
+                            <field name="edd_next_review"/>
+                            <field name="senior_approval_id"/>
+                            <field name="senior_approval_date" invisible="not senior_approval_id"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Additional Information">
+                        <page string="Related Persons" name="related_persons">
+                            <group>
+                                <group string="Family Members">
+                                    <!-- Use default one2many rendering to avoid inline field validation issues during module install -->
+                                    <field name="family_members_ids" context="{'default_relationship_type': 'family'}"/>
+                                </group>
+                                <group string="Close Associates">
+                                    <field name="close_associates_ids" context="{'default_relationship_type': 'associate'}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Source of Wealth &amp; Funds" name="source_wealth">
+                            <group>
+                                <field name="source_of_wealth" placeholder="Describe how the individual's overall wealth was acquired..."/>
+                                <field name="source_of_funds" placeholder="Detail the origin of funds involved in business relationships..."/>
+                            </group>
+                        </page>
+                        <page string="Additional Information" name="additional_info">
                             <group>
                                 <field name="source"/>
                                 <field name="notes"/>
@@ -66,6 +100,11 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
@@ -200,22 +239,154 @@
         </field>
     </record>
 
+    <!-- PEP Relationship Views -->
+    <record id="view_pep_relationship_tree" model="ir.ui.view">
+        <field name="name">pep.relationship.tree</field>
+        <field name="model">pep.relationship</field>
+        <field name="arch" type="xml">
+            <list string="PEP Relationships">
+                <field name="pep_id"/>
+                <field name="name"/>
+                <field name="relationship_type"/>
+                <field name="family_relation"/>
+                <field name="association_type"/>
+                <field name="verification_date"/>
+                <field name="edd_required"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pep_relationship_form" model="ir.ui.view">
+        <field name="name">pep.relationship.form</field>
+        <field name="model">pep.relationship</field>
+        <field name="arch" type="xml">
+            <form string="PEP Relationship">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="pep_id"/>
+                            <field name="name"/>
+                            <field name="relationship_type"/>
+                            <field name="family_relation" invisible="relationship_type != 'family'"/>
+                            <field name="association_type" invisible="relationship_type != 'associate'"/>
+                        </group>
+                        <group>
+                            <field name="date_of_birth"/>
+                            <field name="nationality"/>
+                            <field name="verification_date"/>
+                            <field name="verification_source"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Due Diligence" name="due_diligence">
+                            <group>
+                                <field name="edd_required"/>
+                                <field name="source_of_wealth" invisible="not edd_required"/>
+                                <field name="source_of_funds" invisible="not edd_required"/>
+                                <field name="relationship_notes"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pep_relationship_search" model="ir.ui.view">
+        <field name="name">pep.relationship.search</field>
+        <field name="model">pep.relationship</field>
+        <field name="arch" type="xml">
+            <search string="Search PEP Relationships">
+                <field name="name"/>
+                <field name="pep_id"/>
+                <separator/>
+                <filter string="Family Members" name="family" domain="[('relationship_type', '=', 'family')]"/>
+                <filter string="Close Associates" name="associate" domain="[('relationship_type', '=', 'associate')]"/>
+                <separator/>
+                <filter string="EDD Required" name="edd_required" domain="[('edd_required', '=', True)]"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Related PEP" name="group_by_pep" context="{'group_by': 'pep_id'}"/>
+                    <filter string="Relationship Type" name="group_by_type" context="{'group_by': 'relationship_type'}"/>
+                    <filter string="Verification Date" name="group_by_verification" context="{'group_by': 'verification_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Approval Wizard View -->
+    <record id="view_pep_approval_wizard_form" model="ir.ui.view">
+        <field name="name">pep.approval.wizard.form</field>
+        <field name="model">pep.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Request Senior Approval">
+                <group>
+                    <field name="pep_id" invisible="1"/>
+                    <field name="approved_by"/>
+                    <field name="note"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm_approval" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_pep_relationship" model="ir.actions.act_window">
+        <field name="name">PEP Relationships</field>
+        <field name="res_model">pep.relationship</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_pep_relationship_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PEP Relationship
+            </p>
+        </field>
+    </record>
+
     <!-- Menu Items -->
     <menuitem id="menu_pep_root" 
               name="PEP Checker" 
               sequence="10"/>
 
+    <menuitem id="menu_pep_main"
+              name="PEP Management"
+              parent="menu_pep_root"
+              sequence="10"/>
+
     <menuitem id="menu_pep_persons"
               name="PEP Persons"
-              parent="menu_pep_root"
+              parent="menu_pep_main"
               action="action_pep_person"
               sequence="10"/>
+
+    <menuitem id="menu_pep_relationships"
+              name="PEP Relationships"
+              parent="menu_pep_main"
+              action="action_pep_relationship"
+              sequence="20"/>
 
     <menuitem id="menu_pep_screenings"
               name="PEP Screenings"
               parent="menu_pep_root"
               action="action_pep_screening"
-              sequence="20"/>
+              sequence="30"/>
+
     <!-- Compatibility aliases: create simple xmlid names that some clients may lookup -->
     <record id="pep_person_form_alias" model="ir.model.data">
         <field name="module">pep_checker</field>

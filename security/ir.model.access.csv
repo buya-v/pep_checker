@@ -3,3 +3,5 @@ access_pep_person_user,PEP Person User Access,model_pep_person,pep_checker.group
 access_pep_person_manager,PEP Person Manager Access,model_pep_person,pep_checker.group_pep_manager,1,1,1,1
 access_pep_screening_user,PEP Screening User Access,model_pep_screening,pep_checker.group_pep_user,1,1,1,0
 access_pep_screening_manager,PEP Screening Manager Access,model_pep_screening,pep_checker.group_pep_manager,1,1,1,1
+access_pep_relationship_user,PEP Relationship User Access,model_pep_relationship,pep_checker.group_pep_user,1,1,1,0
+access_pep_relationship_manager,PEP Relationship Manager Access,model_pep_relationship,pep_checker.group_pep_manager,1,1,1,1

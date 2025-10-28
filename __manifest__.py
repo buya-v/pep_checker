@@ -16,6 +16,9 @@
         'base',
         'mail',
     ],
+    'external_dependencies': {
+        'python': ['dateutil'],
+    },
     'data': [
         'security/pep_security.xml',
         'security/ir.model.access.csv',
