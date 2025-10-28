@@ -21,6 +21,9 @@
         'security/ir.model.access.csv',
         'views/pep_views.xml',
     ],
+    'tests': [
+        'tests/test_pep.py',
+    ],
     'demo': [],
     'installable': True,
     'application': True,

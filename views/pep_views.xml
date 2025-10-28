@@ -19,10 +19,10 @@
 
     <!-- PEP Person Form View -->
     <record id="view_pep_person_form" model="ir.ui.view">
-        <field name="name">pep.person.form</field>
+    <field name="name">PEP Person Form</field>
         <field name="model">pep.person</field>
         <field name="arch" type="xml">
-            <form string="PEP Person" js_class="pep_person_form">
+            <form string="PEP Person">
                 <field name="message_follower_ids" invisible="1"/>
                 <field name="activity_ids" invisible="1"/>
                 <field name="message_ids" invisible="1"/>
@@ -114,10 +114,10 @@
 
     <!-- PEP Screening Form View -->
     <record id="view_pep_screening_form" model="ir.ui.view">
-        <field name="name">pep.screening.form</field>
+    <field name="name">PEP Screening Form</field>
         <field name="model">pep.screening</field>
         <field name="arch" type="xml">
-            <form string="PEP Screening" js_class="pep_screening_form">
+            <form string="PEP Screening">
                 <field name="message_follower_ids" invisible="1"/>
                 <field name="activity_ids" invisible="1"/>
                 <field name="message_ids" invisible="1"/>
@@ -216,4 +216,18 @@
               parent="menu_pep_root"
               action="action_pep_screening"
               sequence="20"/>
+    <!-- Compatibility aliases: create simple xmlid names that some clients may lookup -->
+    <record id="pep_person_form_alias" model="ir.model.data">
+        <field name="module">pep_checker</field>
+        <field name="name">pep_person_form</field>
+        <field name="model">ir.ui.view</field>
+        <field name="res_id" ref="view_pep_person_form"/>
+    </record>
+
+    <record id="pep_screening_form_alias" model="ir.model.data">
+        <field name="module">pep_checker</field>
+        <field name="name">pep_screening_form</field>
+        <field name="model">ir.ui.view</field>
+        <field name="res_id" ref="view_pep_screening_form"/>
+    </record>
 </odoo>
