@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+        This file contains PEP data for Mongolian nationals.
+        noupdate="1" is used to prevent this data from being overwritten on module updates,
+        allowing users to modify these records.
+        -->
+
+        <record id="pep_mn_khurelsukh" model="pep.person">
+            <field name="name">Ukhnaagiin Khürelsükh</field>
+            <field name="position">head_state</field>
+            <field name="organization">Office of the President of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">President of Mongolia since June 2021.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Ukhnaagiin_Kh%C3%BCrels%C3%BCkh</field>
+        </record>
+
+        <record id="pep_mn_oyun_erdene" model="pep.person">
+            <field name="name">Luvsannamsrain Oyun-Erdene</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Prime Minister of Mongolia since January 2021.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Luvsannamsrain_Oyun-Erdene</field>
+        </record>
+
+        <record id="pep_mn_nyambaatar" model="pep.person">
+            <field name="name">Khishgeegiin Nyambaatar</field>
+            <field name="position">governor</field>
+            <field name="organization">Governor's Office of Ulaanbaatar</field>
+            <field name="pep_type">domestic</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Governor of the Capital City Ulaanbaatar since 2023.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Khishgeegiin_Nyambaatar</field>
+        </record>
+
+        <!-- Former Presidents of Mongolia -->
+        <record id="pep_mn_battulga" model="pep.person">
+            <field name="name">Khaltmaagiin Battulga</field>
+            <field name="position">head_state</field>
+            <field name="organization">Office of the President of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2017, 7, 10).date()"/>
+            <field name="end_date" eval="datetime(2021, 6, 25).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">5th President of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Khaltmaagiin_Battulga</field>
+        </record>
+
+        <record id="pep_mn_elbegdorj" model="pep.person">
+            <field name="name">Tsakhiagiin Elbegdorj</field>
+            <field name="position">head_state</field>
+            <field name="organization">Office of the President of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2009, 6, 18).date()"/>
+            <field name="end_date" eval="datetime(2017, 7, 10).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">4th President of Mongolia. Also served as Prime Minister.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Tsakhiagiin_Elbegdorj</field>
+        </record>
+
+        <record id="pep_mn_enkhbayar" model="pep.person">
+            <field name="name">Nambaryn Enkhbayar</field>
+            <field name="position">head_state</field>
+            <field name="organization">Office of the President of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2005, 6, 24).date()"/>
+            <field name="end_date" eval="datetime(2009, 6, 18).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">3rd President of Mongolia. Also served as Prime Minister.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Nambaryn_Enkhbayar</field>
+        </record>
+
+        <!-- Former Prime Ministers of Mongolia -->
+        <record id="pep_mn_khurelsukh_pm" model="pep.person">
+            <field name="name">Ukhnaagiin Khürelsükh</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2017, 10, 4).date()"/>
+            <field name="end_date" eval="datetime(2021, 1, 27).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Served as Prime Minister before becoming President.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Ukhnaagiin_Kh%C3%BCrels%C3%BCkh</field>
+        </record>
+
+        <record id="pep_mn_erdenebat" model="pep.person">
+            <field name="name">Jargaltulgyn Erdenebat</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2016, 7, 7).date()"/>
+            <field name="end_date" eval="datetime(2017, 10, 4).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Jargaltulgyn_Erdenebat</field>
+        </record>
+
+        <!-- Former Governors of Ulaanbaatar -->
+        <record id="pep_mn_sumyaabazar" model="pep.person">
+            <field name="name">Dolgorsürengiin Sumyaabazar</field>
+            <field name="position">governor</field>
+            <field name="organization">Governor's Office of Ulaanbaatar</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2020, 10, 23).date()"/>
+            <field name="end_date" eval="datetime(2023, 12, 7).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Governor of the Capital City Ulaanbaatar.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Dolgors%C3%BCrengiin_Sumyaabazar</field>
+        </record>
+
+        <record id="pep_mn_amarsaikhan" model="pep.person">
+            <field name="name">Sainbuyangiin Amarsaikhan</field>
+            <field name="position">governor</field>
+            <field name="organization">Governor's Office of Ulaanbaatar</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2019, 2, 27).date()"/>
+            <field name="end_date" eval="datetime(2020, 7, 8).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Governor of the Capital City Ulaanbaatar.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Sainbuyangiin_Amarsaikhan</field>
+        </record>
+
+        <!-- Additional Former Presidents -->
+        <record id="pep_mn_ochirbat" model="pep.person">
+            <field name="name">Punsalmaagiin Ochirbat</field>
+            <field name="position">head_state</field>
+            <field name="organization">Office of the President of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1990, 9, 3).date()"/>
+            <field name="end_date" eval="datetime(1997, 6, 20).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">1st President of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Punsalmaagiin_Ochirbat</field>
+        </record>
+
+        <record id="pep_mn_bagabandi" model="pep.person">
+            <field name="name">Natsagiin Bagabandi</field>
+            <field name="position">head_state</field>
+            <field name="organization">Office of the President of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1997, 6, 20).date()"/>
+            <field name="end_date" eval="datetime(2005, 6, 24).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">2nd President of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Natsagiin_Bagabandi</field>
+        </record>
+
+        <!-- Additional Former Prime Ministers -->
+        <record id="pep_mn_byambasuren" model="pep.person">
+            <field name="name">Dashiin Byambasüren</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1990, 9, 10).date()"/>
+            <field name="end_date" eval="datetime(1992, 7, 21).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Dashiin_Byambas%C3%BCren</field>
+        </record>
+
+        <record id="pep_mn_jasrai" model="pep.person">
+            <field name="name">Puntsagiin Jasrai</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1992, 7, 21).date()"/>
+            <field name="end_date" eval="datetime(1996, 7, 19).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Puntsagiin_Jasrai</field>
+        </record>
+
+        <record id="pep_mn_enkhsaikhan" model="pep.person">
+            <field name="name">Mendsaikhany Enkhsaikhan</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1996, 7, 19).date()"/>
+            <field name="end_date" eval="datetime(1998, 4, 23).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Mendsaikhany_Enkhsaikhan</field>
+        </record>
+
+        <record id="pep_mn_narantsatsralt" model="pep.person">
+            <field name="name">Janlavyn Narantsatsralt</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1998, 12, 9).date()"/>
+            <field name="end_date" eval="datetime(1999, 7, 22).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Janlavyn_Narantsatsralt</field>
+        </record>
+
+        <record id="pep_mn_amarjargal" model="pep.person">
+            <field name="name">Rinchinnyamyn Amarjargal</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(1999, 7, 30).date()"/>
+            <field name="end_date" eval="datetime(2000, 7, 26).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Rinchinnyamyn_Amarjargal</field>
+        </record>
+
+        <record id="pep_mn_enkhbold" model="pep.person">
+            <field name="name">Miyeegombyn Enkhbold</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2006, 1, 25).date()"/>
+            <field name="end_date" eval="datetime(2007, 11, 22).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Miyeegombyn_Enkhbold</field>
+        </record>
+
+        <record id="pep_mn_bayar" model="pep.person">
+            <field name="name">Sanjaagiin Bayar</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2007, 11, 22).date()"/>
+            <field name="end_date" eval="datetime(2009, 10, 29).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Sanjaagiin_Bayar</field>
+        </record>
+
+        <record id="pep_mn_batbold" model="pep.person">
+            <field name="name">Sükhbaataryn Batbold</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2009, 10, 29).date()"/>
+            <field name="end_date" eval="datetime(2012, 8, 10).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/S%C3%BCkhbaataryn_Batbold</field>
+        </record>
+
+        <record id="pep_mn_altankhuyag" model="pep.person">
+            <field name="name">Norovyn Altankhuyag</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2012, 8, 10).date()"/>
+            <field name="end_date" eval="datetime(2014, 11, 5).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Norovyn_Altankhuyag</field>
+        </record>
+
+        <record id="pep_mn_saikhanbileg" model="pep.person">
+            <field name="name">Chimediin Saikhanbileg</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mongolia</field>
+            <field name="pep_type">domestic</field>
+            <field name="status">former</field>
+            <field name="start_date" eval="datetime(2014, 11, 21).date()"/>
+            <field name="end_date" eval="datetime(2016, 7, 7).date()"/>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
+            <field name="notes">Former Prime Minister of Mongolia.</field>
+            <field name="source_url">https://en.wikipedia.org/wiki/Chimediin_Saikhanbileg</field>
+        </record>
+
+    </data>
+</odoo>

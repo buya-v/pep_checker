@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo file deprecated. Data moved to data/data.xml and is now loaded on module install/upgrade.
+             This file remains for historical reference and will not be used by the module. -->
+    </data>
+</odoo>

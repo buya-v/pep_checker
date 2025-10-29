@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- PEP dataset converted from demo to module data (loaded on module install/upgrade) -->
+        <record id="pep_demo_1" model="pep.person">
+            <field name="name">Andrew Bailey</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Bank of England</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: United Kingdom</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'GB')]"/>
+            <field name="source_url">https://www.bankofengland.co.uk/about/people/andrew-bailey/biography</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bankofengland.co.uk/about/people/andrew-bailey/biography | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_2" model="pep.person">
+            <field name="name">Ayman M. Al-Sayari (Governor, SAMA)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Saudi Central Bank (SAMA)</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Saudi Arabia</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'SA')]"/>
+            <field name="source_url">https://www.sama.gov.sa/en-US/News/Pages/news-1109.aspx</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.sama.gov.sa/en-US/News/Pages/news-1109.aspx | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_3" model="pep.person">
+            <field name="name">Claudia Sheinbaum</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Mexico</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Mexico</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MX')]"/>
+            <field name="source_url">https://www.gob.mx/presidencia/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.gob.mx/presidencia/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_5" model="pep.person">
+            <field name="name">Cyril Ramaphosa</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of South Africa</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: South Africa</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'ZA')]"/>
+            <field name="source_url">https://www.thepresidency.gov.za/president-ramaphosa-arrives-malaysia</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.thepresidency.gov.za/president-ramaphosa-arrives-malaysia | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_8" model="pep.person">
+            <field name="name">Donald J. Trump</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of the United States</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: United States of America</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'US')]"/>
+            <field name="source_url">https://www.whitehouse.gov/presidential-actions/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.whitehouse.gov/presidential-actions/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_9" model="pep.person">
+            <field name="name">Droupadi Murmu</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of India</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: India</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'IN')]"/>
+            <field name="source_url">https://presidentofindia.nic.in/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://presidentofindia.nic.in/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_10" model="pep.person">
+            <field name="name">Emmanuel Macron</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of France</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: France</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'FR')]"/>
+            <field name="source_url">https://www.elysee.fr/en/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.elysee.fr/en/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_11" model="pep.person">
+            <field name="name">Emperor Naruhito</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Japan</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Japan</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'JP')]"/>
+            <field name="source_url">https://www.kunaicho.go.jp/e-about/history/history03.html</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.kunaicho.go.jp/e-about/history/history03.html | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_12" model="pep.person">
+            <field name="name">Fabio Panetta (Governor, Banca d'Italia)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Banca d'Italia</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Italy</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'IT')]"/>
+            <field name="source_url">https://www.bancaditalia.it/chi-siamo/organizzazione/organi-direzione/direttorio/biografia-Panetta/index.html?com.dotmarketing.htmlpage.language=1</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bancaditalia.it/chi-siamo/organizzazione/organi-direzione/direttorio/biografia-Panetta/index.html?com.dotmarketing.htmlpage.language=1 | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_13" model="pep.person">
+            <field name="name">Fatih Karahan</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Central Bank of the Republic of Türkiye</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Türkiye</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'TR')]"/>
+            <field name="source_url">https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/About+The+Bank/Org/CBG</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/About+The+Bank/Org/CBG | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_14" model="pep.person">
+            <field name="name">François Villeroy de Galhau</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Banque de France</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: France</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'FR')]"/>
+            <field name="source_url">https://www.banque-france.fr/en/about-banque-de-france/organisation/governor</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.banque-france.fr/en/about-banque-de-france/organisation/governor | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_15" model="pep.person">
+            <field name="name">Frank-Walter Steinmeier</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Germany</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Germany</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'DE')]"/>
+            <field name="source_url">https://www.bundespraesident.de/EN/Home/home_node.html</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bundespraesident.de/EN/Home/home_node.html | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_16" model="pep.person">
+            <field name="name">Friedrich Merz</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Germany</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Germany</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'DE')]"/>
+            <field name="source_url">https://www.bundesregierung.de/breg-en</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bundesregierung.de/breg-en | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_17" model="pep.person">
+            <field name="name">Gabriel Galipolo</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Central Bank of Brazil</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Brazil</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'BR')]"/>
+            <field name="source_url">https://www.reuters.com/world/americas/brazil-central-bank-still-sees-signs-economic-resilience-says-governor-2025-09-29/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.reuters.com/world/americas/brazil-central-bank-still-sees-signs-economic-resilience-says-governor-2025-09-29/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_18" model="pep.person">
+            <field name="name">Giorgia Meloni</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Italy</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Italy</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'IT')]"/>
+            <field name="source_url">https://www.governo.it/en/president</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.governo.it/en/president | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_19" model="pep.person">
+            <field name="name">Jerome H. Powell (Chair, Federal Reserve)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Federal Reserve</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: United States of America</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'US')]"/>
+            <field name="source_url">https://www.federalreserve.gov/newsevents/speech/powell20251014a.htm</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.federalreserve.gov/newsevents/speech/powell20251014a.htm | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_20" model="pep.person">
+            <field name="name">Joachim Nagel (President, Deutsche Bundesbank)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Deutsche Bundesbank</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Germany</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'DE')]"/>
+            <field name="source_url">https://www.bundesbank.de/en/bundesbank/organisation/executive-board/joachim-nagel-882238</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bundesbank.de/en/bundesbank/organisation/executive-board/joachim-nagel-882238 | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_21" model="pep.person">
+            <field name="name">Kazuo Ueda</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Bank of Japan</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Japan</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'JP')]"/>
+            <field name="source_url">https://www.boj.or.jp/en/about/organization/policyboard/gv_ueda.htm</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.boj.or.jp/en/about/organization/policyboard/gv_ueda.htm | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_22" model="pep.person">
+            <field name="name">Keir Starmer</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of the United Kingdom</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: United Kingdom</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'GB')]"/>
+            <field name="source_url">https://www.gov.uk/government/speeches/pms-remarks-at-the-coalition-of-the-willing-press-conference-24-october-2025</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.gov.uk/government/speeches/pms-remarks-at-the-coalition-of-the-willing-press-conference-24-october-2025 | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_23" model="pep.person">
+            <field name="name">King Charles III</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of the United Kingdom</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: United Kingdom</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'GB')]"/>
+            <field name="source_url">https://www.royal.uk/king-charles-iii</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.royal.uk/king-charles-iii | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_24" model="pep.person">
+            <field name="name">King Charles III (represented by Governor General)</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Canada</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Canada</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'CA')]"/>
+            <field name="source_url">https://www.gg.ca/en</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.gg.ca/en | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_25" model="pep.person">
+            <field name="name">King Salman bin Abdulaziz Al Saud</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Saudi Arabia</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Saudi Arabia</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'SA')]"/>
+            <field name="source_url">https://www.royalcourt.gov.sa/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.royalcourt.gov.sa/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_26" model="pep.person">
+            <field name="name">Lee Jae-myung</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of the Republic of Korea</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Republic of Korea</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'KR')]"/>
+            <field name="source_url">https://www.korea.net/Government/Administration/President-Lee-Jae-Myung</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.korea.net/Government/Administration/President-Lee-Jae-Myung | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_27" model="pep.person">
+            <field name="name">Lesetja Kganyago</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">South African Reserve Bank</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: South Africa</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'ZA')]"/>
+            <field name="source_url">https://www.resbank.co.za/en/home/publications/publication-detail-pages/speeches/speeches-by-governors/2025/kganyago-cross-border-payments</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.resbank.co.za/en/home/publications/publication-detail-pages/speeches/speeches-by-governors/2025/kganyago-cross-border-payments | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_28" model="pep.person">
+            <field name="name">Luiz Inacio Lula da Silva</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Brazil</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Brazil</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'BR')]"/>
+            <field name="source_url">https://www.gov.br/planalto/en</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.gov.br/planalto/en | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_30" model="pep.person">
+            <field name="name">Mark Carney</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Government of Canada</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Canada</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'CA')]"/>
+            <field name="source_url">https://www.pm.gc.ca/en</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.pm.gc.ca/en | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_31" model="pep.person">
+            <field name="name">Michele Bullock (Governor, Reserve Bank of Australia)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Reserve Bank of Australia</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Australia</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'AU')]"/>
+            <field name="source_url">https://www.rba.gov.au/about-rba/our-people/michele-bullock.html</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.rba.gov.au/about-rba/our-people/michele-bullock.html | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_32" model="pep.person">
+            <field name="name">Mohammed bin Salman (Prime Minister)</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Saudi Arabia</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Saudi Arabia</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'SA')]"/>
+            <field name="source_url">https://en.wikipedia.org/wiki/Mohammed_bin_Salman</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://en.wikipedia.org/wiki/Mohammed_bin_Salman | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_33" model="pep.person">
+            <field name="name">Narendra Modi</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of India</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: India</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'IN')]"/>
+            <field name="source_url">https://www.pmindia.gov.in/en/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.pmindia.gov.in/en/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_34" model="pep.person">
+            <field name="name">Perry Warjiyo</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Bank Indonesia</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Indonesia</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'ID')]"/>
+            <field name="source_url">https://www.bi.go.id/en/tentang-bi/bi-today/manajemen/anggota-dewan-gubernur/Pages/Perry-Warjiyo.aspx</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bi.go.id/en/tentang-bi/bi-today/manajemen/anggota-dewan-gubernur/Pages/Perry-Warjiyo.aspx | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_35" model="pep.person">
+            <field name="name">Prabowo Subianto</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Indonesia</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Indonesia</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'ID')]"/>
+            <field name="source_url">https://www.presidenri.go.id/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.presidenri.go.id/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_37" model="pep.person">
+            <field name="name">Recep Tayyip Erdogan</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Türkiye</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Türkiye</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'TR')]"/>
+            <field name="source_url">https://www.tccb.gov.tr/en/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.tccb.gov.tr/en/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_39" model="pep.person">
+            <field name="name">Rhee Chang-yong (Chang Yong Rhee)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Bank of Korea</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Republic of Korea</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'KR')]"/>
+            <field name="source_url">https://www.bok.or.kr/eng/main/contents.do?menuNo=400243</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bok.or.kr/eng/main/contents.do?menuNo=400243 | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_40" model="pep.person">
+            <field name="name">Sanae Takaichi</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Japan</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Japan</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'JP')]"/>
+            <field name="source_url">https://apnews.com/article/24b4a5e2a2b777139de66e38665ced0d</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://apnews.com/article/24b4a5e2a2b777139de66e38665ced0d | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_41" model="pep.person">
+            <field name="name">Sanjay Malhotra (Governor, RBI)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Reserve Bank of India</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: India</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'IN')]"/>
+            <field name="source_url">https://www.reuters.com/world/india/india-can-weather-global-challenges-rbi-chief-says-2025-10-03/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.reuters.com/world/india/india-can-weather-global-challenges-rbi-chief-says-2025-10-03/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_42" model="pep.person">
+            <field name="name">Sebastien Lecornu</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of France</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: France</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'FR')]"/>
+            <field name="source_url">https://www.ft.com/content/52c7ff7f-362a-4bc6-b4b8-03464fa3daf6</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.ft.com/content/52c7ff7f-362a-4bc6-b4b8-03464fa3daf6 | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_43" model="pep.person">
+            <field name="name">Sergio Mattarella</field>
+            <field name="position">head_state</field>
+            <field name="organization">Government of Italy</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Italy</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'IT')]"/>
+            <field name="source_url">https://www.quirinale.it/page/ilpresidente_en</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.quirinale.it/page/ilpresidente_en | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_44" model="pep.person">
+            <field name="name">Tiff Macklem (Governor, Bank of Canada)</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Bank of Canada</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Canada</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'CA')]"/>
+            <field name="source_url">https://www.bankofcanada.ca/profile/tiff-macklem/</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.bankofcanada.ca/profile/tiff-macklem/ | Source Date: 2025-10-28</field>
+        </record>
+
+        <record id="pep_demo_45" model="pep.person">
+            <field name="name">Victoria Rodriguez Ceja</field>
+            <field name="position">central_bank_board</field>
+            <field name="organization">Bank of Mexico</field>
+            <field name="pep_type">foreign</field>
+            <field name="notes">Country: Mexico</field>
+            <field name="nationality" model="res.country" search="[('code', '=', 'MX')]"/>
+            <field name="source_url">https://www.banxico.org.mx/getting-to-know-banco-de-mexico/d/%7B21563EA0-413B-5B69-AA4D-C529AA6251E9%7D.pdf</field>
+            <field name="source_date">2025-10-28</field>
+            <field name="source">https://www.banxico.org.mx/getting-to-know-banco-de-mexico/d/%7B21563EA0-413B-5B69-AA4D-C529AA6251E9%7D.pdf | Source Date: 2025-10-28</field>
+        </record>
+
+    </data>
+</odoo>

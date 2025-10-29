@@ -1,6 +1,20 @@
 from odoo import models, fields, api
 from datetime import datetime, date
-import calendar
+import json
+import logging
+
+try:
+    from dateutil.relativedelta import relativedelta
+except ImportError:
+    relativedelta = None
+
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
+
+_logger = logging.getLogger(__name__)
+
 
 class PEPPerson(models.Model):
     _name = 'pep.person'
@@ -13,25 +27,26 @@ class PEPPerson(models.Model):
     name = fields.Char(string='Full Name', required=True, tracking=True)
     date_of_birth = fields.Date(string='Date of Birth')
     nationality = fields.Many2one('res.country', string='Nationality', tracking=True, index=True)
+    is_mongolian_pep = fields.Boolean(string="Mongolian PEP", compute='_compute_is_mongolian_pep', store=True,
+                                     help="Indicates if the person is a PEP according to Mongolian law.")
     position = fields.Selection([
-        # Foreign and Domestic PEP positions
+        # Positions based on Mongolian Law & FATF Recommendations
         ('head_state', 'Head of State/Government'),
-        ('minister', 'Minister/Vice Minister'),
         ('parliament', 'Member of Parliament'),
-        ('senior_politician', 'Senior Politician'),
-        ('senior_govt', 'Senior Government Official'),
+        ('governor', 'Governor of Province/ Capital City'),
         ('judicial', 'Senior Judicial Official'),
-        ('military', 'Senior Military Official'),
-        ('state_exec', 'Senior State-Owned Enterprise Executive'),
-        ('party_official', 'Important Political Party Official'),
+        ('central_bank_board', 'Member of Court of Auditors or Board of a Central Bank'),
+        ('diplomat_military', 'Ambassador or High-ranking Military Officer'),
+        ('state_enterprise', 'Senior State-Owned Enterprise Executive'),
+        ('party_official', 'Senior Political Party Official'),
         # International Organization positions
-        ('intl_director', 'Director/Deputy Director'),
-        ('intl_board', 'Board Member'),
-        ('intl_senior', 'Senior Management'),
-        ('other', 'Other Senior Position')
+        ('intl_director', 'Director/Deputy Director (International Org)'),
+        ('intl_board', 'Board Member (International Org)'),
+        ('intl_senior', 'Senior Management (International Org)'),
+        ('other', 'Other (Not defined in Mongolian Law)')
     ], string='Position/Role', tracking=True, index=True, required=True)
     custom_position = fields.Char(string='Specific Position Title', tracking=True)
-    organization = fields.Char(string='Organization/Institution', tracking=True, index=True)
+    organization = fields.Char(string='Organization/Institution', tracking=True, index=True, required=True)
     organization_type = fields.Selection([
         ('government', 'Government'),
         ('political_party', 'Political Party'),
@@ -94,30 +109,70 @@ class PEPPerson(models.Model):
                                          string='Close Associates')
     
     source = fields.Text(string='Information Source', tracking=True)
+    source_url = fields.Char(string='Source URL', help='URL to the source document or page', index=True)
+    source_date = fields.Date(string='Source Date', help='Date when the source was published or captured', index=True)
     notes = fields.Text(string='Additional Notes', tracking=True)
+    # Self-declaration tracking
+    self_declared = fields.Boolean(string='Self-Declared', tracking=True,
+                               help="Whether the person self-declared their PEP status")
+    self_declaration_date = fields.Date(string='Self-Declaration Date', tracking=True)
+
+    # Record retention tracking
+    retention_period = fields.Integer(string='Record Retention Period (Years)', default=5,
+                                  help="Minimum period in years to retain PEP records after relationship end")
+    retention_end_date = fields.Date(string='Retention End Date', 
+                                   compute='_compute_retention_end_date', store=True)
+
     active = fields.Boolean(default=True)
     last_checked = fields.Datetime(string='Last Checked', default=fields.Datetime.now, index=True)
     
+    @api.constrains('pep_type', 'position', 'organization_type')
+    def _check_pep_type_consistency(self):
+        for record in self:
+            if record.pep_type == 'international' and record.organization_type != 'international_org':
+                raise models.ValidationError('International PEPs must be associated with international organizations')
+    
+    @api.depends('end_date', 'retention_period')
+    def _compute_retention_end_date(self):
+        for record in self:
+            if record.end_date and record.retention_period > 0 and relativedelta:
+                record.retention_end_date = record.end_date + relativedelta(years=record.retention_period)
+            elif record.end_date and record.retention_period > 0:
+                # Fallback if dateutil is not available
+                record.retention_end_date = date(record.end_date.year + record.retention_period, record.end_date.month, record.end_date.day)
+            else:
+                record.retention_end_date = False
+
+    @api.depends('nationality', 'position')
+    def _compute_is_mongolian_pep(self):
+        # Define the specific positions that are considered PEPs under Mongolian Law
+        mongolian_pep_positions = [
+            'head_state',
+            'parliament',
+            'governor',
+        ]
+        for record in self:
+            is_mn_position = record.position in mongolian_pep_positions
+            record.is_mongolian_pep = is_mn_position
+
     @api.depends('pep_type', 'position', 'status', 'end_date')
     def _compute_risk_level(self):
         for record in self:
             if record.status == 'deceased':
                 record.risk_level = 'low'
             elif record.status == 'former':
-                # Check if it's been more than 18 months since end of position
-                if record.end_date and (datetime.now().date() - record.end_date).days > 548:  # 18 months * 30.44 days
+                # A former PEP may be considered lower risk after a certain period (e.g., 18 months)
+                # has passed since they left their position.
+                if record.end_date and relativedelta and (fields.Date.today() > record.end_date + relativedelta(months=18)):
                     record.risk_level = 'low'
                 else:
                     record.risk_level = 'medium'
+            elif record.is_mongolian_pep:
+                record.risk_level = 'high'
             elif record.pep_type == 'foreign':
                 record.risk_level = 'high'
             elif record.pep_type == 'international':
-                if record.position in ['intl_director', 'intl_board']:
-                    record.risk_level = 'high'
-                else:
-                    record.risk_level = 'medium'
-            else:  # domestic PEP
-                if record.position in ['head_state', 'minister', 'senior_politician']:
+                if record.position in ('intl_director', 'intl_board'):
                     record.risk_level = 'high'
                 else:
                     record.risk_level = 'medium'
@@ -129,44 +184,36 @@ class PEPPerson(models.Model):
                 record.edd_next_review = fields.Date.today()
                 continue
 
+            if not relativedelta:
+                record.edd_next_review = False  # Or handle with fallback
+                continue
+
+            months_to_add = 0
             if record.monitoring_frequency == 'monthly':
-                months = 1
+                months_to_add = 1
             elif record.monitoring_frequency == 'quarterly':
-                months = 3
+                months_to_add = 3
             elif record.monitoring_frequency == 'semi_annual':
-                months = 6
-            else:  # annual
-                months = 12
+                months_to_add = 6
+            elif record.monitoring_frequency == 'annual':
+                months_to_add = 12
 
-            # Add months to a date without external dependencies (safe for environments
-            # where dateutil is not available). We calculate the target year/month and
-            # clamp the day to the last day of that month if necessary.
-            def _add_months(d, m):
-                month = d.month - 1 + m
-                year = d.year + month // 12
-                month = month % 12 + 1
-                day = min(d.day, calendar.monthrange(year, month)[1])
-                return date(year, month, day)
-
-            # edd_last_review is a date field; ensure it's a date instance
-            last = record.edd_last_review
-            if isinstance(last, datetime):
-                last = last.date()
-            record.edd_next_review = _add_months(last, months)
+            if months_to_add > 0:
+                record.edd_next_review = record.edd_last_review + relativedelta(months=months_to_add)
+            else:
+                record.edd_next_review = False
 
     def action_request_approval(self):
         """Request senior management approval for PEP relationship"""
         self.ensure_one()
-        if not self.senior_approval_id:
-            return {
-                'type': 'ir.actions.act_window',
-                'name': 'Request Senior Management Approval',
-                'res_model': 'pep.approval.wizard',
-                'view_mode': 'form',
-                'target': 'new',
-                'context': {'default_pep_id': self.id}
-            }
-        return True
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Request Senior Management Approval',
+            'res_model': 'pep.approval.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_pep_id': self.id}
+        }
 
     def action_schedule_edd_review(self):
         """Schedule the next Enhanced Due Diligence review"""
@@ -245,19 +292,129 @@ class PEPScreening(models.Model):
     date_of_birth = fields.Date(string='Date of Birth')
     nationality = fields.Many2one('res.country', string='Nationality', index=True)
     screening_date = fields.Datetime(string='Screening Date', default=fields.Datetime.now, required=True, index=True)
+    
+    # Enhanced screening information
+    screening_type = fields.Selection([
+        ('initial', 'Initial Screening'),
+        ('periodic', 'Periodic Review'),
+        ('trigger', 'Trigger Event'),
+        ('exit', 'Exit Screening')
+    ], string='Screening Type', required=True, default='initial', tracking=True)
+    
+    trigger_reason = fields.Selection([
+        ('news', 'Adverse News'),
+        ('transaction', 'Unusual Transaction'),
+        ('structure', 'Change in Structure'),
+        ('other', 'Other Trigger')
+    ], string='Trigger Reason', tracking=True)
+    
     result = fields.Selection([
         ('match', 'PEP Match Found'),
         ('possible', 'Possible Match'),
         ('no_match', 'No Match'),
     ], string='Screening Result', tracking=True)
+    
     matched_pep_id = fields.Many2one('pep.person', string='Matched PEP', index=True)
     confidence_score = fields.Float(string='Confidence Score', help="Match confidence percentage")
     screened_by = fields.Many2one('res.users', string='Screened By', default=lambda self: self.env.user, index=True)
+    
+    # Documentation and evidence
+    screening_method = fields.Selection([
+        ('database', 'PEP Database'),
+        ('media', 'Media Search'),
+        ('official', 'Official Lists'),
+        ('manual', 'Manual Research'),
+        ('ai_screening', 'AI Screening')
+    ], string='Screening Method', required=True, tracking=True)
+    
+    database_used = fields.Selection([
+        ('worldcheck', 'World-Check'),
+        ('dowjones', 'Dow Jones'),
+        ('refinitiv', 'Refinitiv'),
+        ('other', 'Other Database')
+    ], string='Database Used')
+    
+    evidence_refs = fields.Text(string='Evidence References', 
+                              help="References to documents, articles, or database entries that support the screening result")
     notes = fields.Text(string='Screening Notes')
+    
+    @api.onchange('screening_type')
+    def _onchange_screening_type(self):
+        if self.screening_type != 'trigger':
+            self.trigger_reason = False
+            
+    @api.onchange('screening_method')
+    def _onchange_screening_method(self):
+        if self.screening_method != 'database':
+            self.database_used = False
     
     def action_screen_name(self):
         self.ensure_one()
-        # TODO: Implement name screening logic
+
+        if not genai:
+            raise models.UserError("The 'google-generativeai' library is not installed. Please install it using: pip install google-generativeai")
+
+        # Get API Key from Odoo's system parameters for security
+        api_key = self.env['ir.config_parameter'].sudo().get_param('pep_checker.google_api_key')
+        if not api_key:
+            raise models.UserError("Google AI API key is not configured. Please set 'pep_checker.google_api_key' in System Parameters.")
+
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-2.5-flash')
+
+        # Construct a detailed prompt for the AI
+        prompt_parts = [
+            f"Please act as a compliance expert. Analyze public information for the following individual to determine if they are a Politically Exposed Person (PEP):",
+            f"Name: {self.name}",
+        ]
+        if self.date_of_birth:
+            prompt_parts.append(f"Date of Birth: {self.date_of_birth.strftime('%Y-%m-%d')}")
+        if self.nationality:
+            prompt_parts.append(f"Nationality: {self.nationality.name}")
+
+        prompt_parts.extend([
+            "\nBased on your analysis, provide a response in JSON format with the following keys:",
+            '- "is_pep": (boolean) true if they are a PEP, otherwise false.',
+            '- "position": (string) The specific political title or role held, if any.',
+            '- "country": (string) The country associated with their political role.',
+            '- "summary": (string) A brief summary of why they are or are not considered a PEP.',
+            '- "source_urls": (array of strings) A list of up to 3 URLs to public sources (like Wikipedia, official government sites, or reputable news articles) that support your conclusion.',
+            "\nIf you cannot find any information, return a JSON object with 'is_pep' as false and a summary explaining that no information was found."
+        ])
+        prompt = "\n".join(prompt_parts)
+
+        try:
+            _logger.info("Sending prompt to Gemini API for PEP screening: %s", self.name)
+            response = model.generate_content(prompt)
+            
+            # Clean the response to extract only the JSON part
+            response_text = response.text.strip().replace('```json', '').replace('```', '').strip()
+            result_data = json.loads(response_text)
+
+            _logger.info("Received AI response: %s", result_data)
+
+            # Update the screening record with the AI's findings
+            if result_data.get('is_pep'):
+                self.write({
+                    'result': 'possible', # Set to 'possible' for manual review
+                    'notes': result_data.get('summary', 'No summary provided.'),
+                    'evidence_refs': "\n".join(result_data.get('source_urls', [])),
+                    'screening_method': 'ai_screening',
+                })
+            else:
+                self.write({
+                    'result': 'no_match',
+                    'notes': result_data.get('summary', 'No match found.'),
+                    'screening_method': 'ai_screening',
+                })
+
+        except json.JSONDecodeError:
+            _logger.error("Failed to decode JSON from AI response: %s", response.text)
+            self.notes = f"AI returned a non-JSON response:\n\n{response.text}"
+        except Exception as e:
+            _logger.error("An error occurred during AI screening: %s", str(e))
+            raise models.UserError(f"An error occurred while contacting the AI service: {e}")
+
         self.screening_date = fields.Datetime.now()
         return True
 
