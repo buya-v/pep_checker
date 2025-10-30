@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import datetime, date
+import re
 import json
 import logging
 
@@ -13,6 +14,11 @@ try:
 except ImportError:
     genai = None
 
+try:
+    import jellyfish
+except ImportError:
+    jellyfish = None
+
 _logger = logging.getLogger(__name__)
 
 
@@ -25,6 +31,8 @@ class PEPPerson(models.Model):
     ]
 
     name = fields.Char(string='Full Name', required=True, tracking=True)
+    name_phonetic = fields.Char(string='Phonetic Name', compute='_compute_phonetic_name', store=True, index=True,
+                                help="Phonetic representation of the name for advanced searching.")
     date_of_birth = fields.Date(string='Date of Birth')
     nationality = fields.Many2one('res.country', string='Nationality', tracking=True, index=True)
     is_mongolian_pep = fields.Boolean(string="Mongolian PEP", compute='_compute_is_mongolian_pep', store=True,
@@ -126,12 +134,38 @@ class PEPPerson(models.Model):
     active = fields.Boolean(default=True)
     last_checked = fields.Datetime(string='Last Checked', default=fields.Datetime.now, index=True)
     
+    @api.depends('name')
+    def _compute_phonetic_name(self):
+        if not jellyfish:
+            _logger.warning("The 'jellyfish' library is not installed. Phonetic search will be disabled.")
+            for record in self:
+                record.name_phonetic = False
+            return
+        for record in self:
+            record.name_phonetic = jellyfish.metaphone(record.name) if record.name else False
     @api.constrains('pep_type', 'position', 'organization_type')
     def _check_pep_type_consistency(self):
         for record in self:
             if record.pep_type == 'international' and record.organization_type != 'international_org':
                 raise models.ValidationError('International PEPs must be associated with international organizations')
     
+    @api.constrains('name', 'nationality')
+    def _check_mongolian_name_format(self):
+        """
+        For Mongolian PEPs, enforce the name format:
+        'Cyrillic Name (Latin Name)'
+        """
+        # Regex to check for:
+        # - Cyrillic characters, spaces, and dots (for initials).
+        # - A space, then a Latin name in parentheses.
+        # This is more flexible to handle AI responses with initials.
+        mongolian_name_pattern = re.compile(r'^[\u0400-\u04FF\s\.]+\s\([\w\s\.]+\)$')
+        for record in self:
+            if record.nationality.code == 'MN':
+                if not record.name or not mongolian_name_pattern.match(record.name):
+                    raise models.ValidationError(
+                        "Invalid name format for a Mongolian PEP. The required format is 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)', for example: 'Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)'.")
+
     @api.depends('end_date', 'retention_period')
     def _compute_retention_end_date(self):
         for record in self:
@@ -351,6 +385,45 @@ class PEPScreening(models.Model):
     def action_screen_name(self):
         self.ensure_one()
 
+        # --- Step 1: Search internal PEP database first ---
+        _logger.info("Performing internal PEP database check for: %s", self.name)
+        
+        # Build a search domain that uses both phonetic matching and a direct 'ilike' match.
+        search_domain = [('name', 'ilike', self.name)]
+        if jellyfish and self.name:
+            phonetic_code = jellyfish.metaphone(self.name)
+            # The '|' creates an OR condition in the search domain.
+            search_domain = ['|', ('name_phonetic', '=', phonetic_code)] + search_domain
+
+        _logger.info("Using search domain: %s", search_domain)
+
+        matched_peps = self.env['pep.person'].search(search_domain)
+
+        if matched_peps:
+            _logger.info("Found %d potential match(es) in the internal database.", len(matched_peps))
+            # If matches are found, update the screening record and stop.
+            if len(matched_peps) == 1:
+                # If only one match, we can consider it a strong candidate.
+                pep = matched_peps[0]
+                self.write({
+                    'result': 'match',
+                    'matched_pep_id': pep.id,
+                    'notes': f"Internal DB Match: Found '{pep.name}' ({pep.pep_type}, {pep.nationality.name}).",
+                    'screening_method': 'database',
+                })
+            else:
+                # If multiple matches, list them for manual review.
+                pep_names = ", ".join(matched_peps.mapped('name'))
+                self.write({
+                    'result': 'possible',
+                    'notes': f"Internal DB: Found multiple possible matches: {pep_names}",
+                    'screening_method': 'database',
+                })
+            self.screening_date = fields.Datetime.now()
+            return True # End the process here
+
+        # --- Step 2: If no internal match, proceed with AI screening ---
+        _logger.info("No internal match found. Proceeding with AI screening for: %s", self.name)
         if not genai:
             raise models.UserError("The 'google-generativeai' library is not installed. Please install it using: pip install google-generativeai")
 
@@ -379,7 +452,7 @@ class PEPScreening(models.Model):
             '- "country": (string) The country associated with their political role.',
             '- "summary": (string) A brief summary of why they are or are not considered a PEP.',
             '- "source_urls": (array of strings) A list of up to 3 URLs to public sources (like Wikipedia, official government sites, or reputable news articles) that support your conclusion.',
-            "\nIf you cannot find any information, return a JSON object with 'is_pep' as false and a summary explaining that no information was found."
+            "\nIf you cannot find any information, return a JSON object with 'is_pep' as false and a summary explaining that no definitive information was found."
         ])
         prompt = "\n".join(prompt_parts)
 
@@ -410,7 +483,7 @@ class PEPScreening(models.Model):
 
         except json.JSONDecodeError:
             _logger.error("Failed to decode JSON from AI response: %s", response.text)
-            self.notes = f"AI returned a non-JSON response:\n\n{response.text}"
+            raise models.UserError(_("The AI returned a response that could not be processed as JSON. Please check the logs for the raw response. Raw response:\n\n%s", response.text))
         except Exception as e:
             _logger.error("An error occurred during AI screening: %s", str(e))
             raise models.UserError(f"An error occurred while contacting the AI service: {e}")

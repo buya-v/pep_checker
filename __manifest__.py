@@ -16,16 +16,15 @@
     'license': 'LGPL-3',
     'depends': [
         'base',
-        'mail',
+        'mail'
     ],
     'external_dependencies': {
-        'python': ['dateutil', 'google-generativeai'],
+        'python': ['dateutil', 'google-generativeai', 'jellyfish'],
     },
     'data': [
         'security/pep_security.xml',
         'security/ir.model.access.csv',
         'views/pep_views.xml',
-        'data/mn_data.xml',
         'data/data.xml',
     ],
     'tests': [

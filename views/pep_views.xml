@@ -56,7 +56,7 @@
                         </group>
                         <group>
                             <field name="position"/>
-                            <field name="custom_position" invisible="position != 'other'"/>
+                            <field name="custom_position" invisible="position != 'other'" required="position == 'other'"/>
                             <field name="organization"/>
                             <field name="organization_type"/>
                             <field name="risk_level"/>
@@ -106,11 +106,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <div name="o_chatter"/>
             </form>
         </field>
     </record>
@@ -203,6 +199,11 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div name="o_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
@@ -227,6 +228,55 @@
                 </group>
             </search>
         </field>
+    </record>
+
+    <!-- PEP AI Search Result Line Tree View -->
+    <record id="view_pep_ai_search_result_line_tree" model="ir.ui.view">
+        <field name="name">pep.ai.search.result.line.tree</field>
+        <field name="model">pep.ai.search.result.line</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false">
+                <field name="name" readonly="1"/>
+                <field name="specific_title" readonly="1"/>
+                <field name="notes" readonly="1"/>
+                <field name="is_created" invisible="1"/>
+                <button name="action_create_pep_person" type="object" string="Create PEP" class="btn-primary"
+                        invisible="is_created"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PEP AI Search Wizard View -->
+    <record id="view_pep_ai_search_wizard_form" model="ir.ui.view">
+        <field name="name">pep.ai.search.wizard.form</field>
+        <field name="model">pep.ai.search.wizard</field>
+        <field name="arch" type="xml">
+            <form string="AI PEP Search">
+                <group>
+                    <group>
+                        <field name="country_id"/>
+                        <field name="position"/>
+                        <field name="year"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Results" name="results_page">
+                        <field name="result_line_ids" nolabel="1"/>
+                    </page>
+                </notebook>
+                <footer>
+                    <button string="Search with AI" type="object" name="action_search_pep_with_ai" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pep_ai_search" model="ir.actions.act_window"> 
+        <field name="name">AI PEP Search</field>
+        <field name="res_model">pep.ai.search.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
     </record>
 
     <!-- Actions -->
@@ -310,11 +360,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <div name="o_chatter"/>
             </form>
         </field>
     </record>
@@ -401,6 +447,12 @@
               parent="menu_pep_root"
               action="action_pep_screening"
               sequence="30"/>
+
+    <menuitem id="menu_pep_ai_search"
+              name="AI PEP Search"
+              parent="menu_pep_root"
+              action="action_pep_ai_search"
+              sequence="40"/>
 
     <!-- Compatibility aliases: create simple xmlid names that some clients may lookup -->
     <record id="pep_person_form_alias" model="ir.model.data">
