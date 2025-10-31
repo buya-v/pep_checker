@@ -37,9 +37,15 @@ class PEPAISearchWizard(models.TransientModel):
         prompt_parts = [
             f"Please act as a compliance research expert. Find a list of individuals who held the position of '{position_label}' in the country '{self.country_id.name}' during the year {self.year}.",
             "\nProvide the response as a single, clean JSON object with a key 'peps', which is an array of objects. Each object must have the following keys:",
-            '- "name": (string) The full name of the person. If the name is in a non-Latin script, provide it in its original form followed by a Latin transliteration in parentheses.',
+            '- "name": (string) The full name of the person.',
             '- "specific_title": (string) Their specific title or role during that year (e.g., "Prime Minister", "Minister of Finance").',
             '- "notes": (string) A brief note about their tenure or significance.',
+            "\nCRITICAL FORMATTING RULE FOR 'name' FIELD:",
+            "If the country is Mongolia, the name MUST be in the format 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)'.",
+            "You must expand any initials. For example:",
+            "  - If you find 'Д. Ганзориг (D. Ganzorig)', you must research and return the full name like 'Дамдин Ганзориг (Ganzorig Damdin)'.",
+            "  - If you find 'Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)', this format is correct.",
+            "For all other countries, provide the name as commonly written.",
             "\nIf you cannot find any information, return a JSON object with an empty 'peps' array."
         ]
         prompt = "\n".join(prompt_parts)

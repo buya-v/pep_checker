@@ -11,7 +11,6 @@
                 <field name="name">Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">President of Mongolia since June 2021.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Ukhnaagiin_Kh%C3%BCrels%C3%BCkh</field>
@@ -21,7 +20,6 @@
                 <field name="name">Лувсаннамсрай Оюун-Эрдэнэ (Oyun-Erdene Luvsannamsrai)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Government of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">Prime Minister of Mongolia since January 2021.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Luvsannamsrain_Oyun-Erdene</field>
@@ -31,7 +29,6 @@
                 <field name="name">Хишиг Нямбаатар (Nyambaatar Khishgee)</field>
                 <field name="position">governor</field>
                 <field name="organization">Governor's Office of Ulaanbaatar</field>
-                <field name="pep_type">domestic</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">Governor of the Capital City Ulaanbaatar since 2023.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Khishgeegiin_Nyambaatar</field>
@@ -42,7 +39,6 @@
                 <field name="name">Халтмаа Баттулга (Battulga Khaltmaa)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2017, 7, 10).date()"/>
                 <field name="end_date" eval="datetime(2021, 6, 25).date()"/>
@@ -55,7 +51,6 @@
                 <field name="name">Цахиа Элбэгдорж (Elbegdorj Tsakhia)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2009, 6, 18).date()"/>
                 <field name="end_date" eval="datetime(2017, 7, 10).date()"/>
@@ -68,7 +63,6 @@
                 <field name="name">Намбар Энхбаяр (Enkhbayar Nambar)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2005, 6, 24).date()"/>
                 <field name="end_date" eval="datetime(2009, 6, 18).date()"/>
@@ -82,7 +76,6 @@
                 <field name="name">Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Government of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2017, 10, 4).date()"/>
                 <field name="end_date" eval="datetime(2021, 1, 27).date()"/>
@@ -95,7 +88,6 @@
                 <field name="name">Жаргалтулга Эрдэнэбат (Erdenebat Jargaltulga)</field>
                 <field name="position">head_state</field>
                 <field name="organization">Government of Mongolia</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2016, 7, 7).date()"/>
                 <field name="end_date" eval="datetime(2017, 10, 4).date()"/>
@@ -109,7 +101,6 @@
                 <field name="name">Долгорсүрэн Сумъяабазар (Sumyaabazar Dolgorsuren)</field>
                 <field name="position">governor</field>
                 <field name="organization">Governor's Office of Ulaanbaatar</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2020, 10, 23).date()"/>
                 <field name="end_date" eval="datetime(2023, 12, 7).date()"/>
@@ -122,7 +113,6 @@
                 <field name="name">Сайнбуян Амарсайхан (Amarsaikhan Sainbuyan)</field>
                 <field name="position">governor</field>
                 <field name="organization">Governor's Office of Ulaanbaatar</field>
-                <field name="pep_type">domestic</field>
                 <field name="status">former</field>
                 <field name="start_date" eval="datetime(2019, 2, 27).date()"/>
                 <field name="end_date" eval="datetime(2020, 7, 8).date()"/>
@@ -137,7 +127,6 @@
             <field name="name">Andrew Bailey</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Bank of England</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: United Kingdom</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'GB')]"/>
             <field name="source_url">https://www.bankofengland.co.uk/about/people/andrew-bailey/biography</field>
@@ -149,7 +138,6 @@
             <field name="name">Ayman M. Al-Sayari (Governor, SAMA)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Saudi Central Bank (SAMA)</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Saudi Arabia</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'SA')]"/>
             <field name="source_url">https://www.sama.gov.sa/en-US/News/Pages/news-1109.aspx</field>
@@ -161,7 +149,6 @@
             <field name="name">Claudia Sheinbaum</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Mexico</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Mexico</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'MX')]"/>
             <field name="source_url">https://www.gob.mx/presidencia/</field>
@@ -173,7 +160,6 @@
             <field name="name">Cyril Ramaphosa</field>
             <field name="position">head_state</field>
             <field name="organization">Government of South Africa</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: South Africa</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'ZA')]"/>
             <field name="source_url">https://www.thepresidency.gov.za/president-ramaphosa-arrives-malaysia</field>
@@ -185,7 +171,6 @@
             <field name="name">Donald J. Trump</field>
             <field name="position">head_state</field>
             <field name="organization">Government of the United States</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: United States of America</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'US')]"/>
             <field name="source_url">https://www.whitehouse.gov/presidential-actions/</field>
@@ -197,7 +182,6 @@
             <field name="name">Droupadi Murmu</field>
             <field name="position">head_state</field>
             <field name="organization">Government of India</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: India</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'IN')]"/>
             <field name="source_url">https://presidentofindia.nic.in/</field>
@@ -209,7 +193,6 @@
             <field name="name">Emmanuel Macron</field>
             <field name="position">head_state</field>
             <field name="organization">Government of France</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: France</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'FR')]"/>
             <field name="source_url">https://www.elysee.fr/en/</field>
@@ -221,7 +204,6 @@
             <field name="name">Emperor Naruhito</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Japan</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Japan</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'JP')]"/>
             <field name="source_url">https://www.kunaicho.go.jp/e-about/history/history03.html</field>
@@ -233,7 +215,6 @@
             <field name="name">Fabio Panetta (Governor, Banca d'Italia)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Banca d'Italia</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Italy</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'IT')]"/>
             <field name="source_url">https://www.bancaditalia.it/chi-siamo/organizzazione/organi-direzione/direttorio/biografia-Panetta/index.html?com.dotmarketing.htmlpage.language=1</field>
@@ -245,7 +226,6 @@
             <field name="name">Fatih Karahan</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Central Bank of the Republic of Türkiye</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Türkiye</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'TR')]"/>
             <field name="source_url">https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/About+The+Bank/Org/CBG</field>
@@ -257,7 +237,6 @@
             <field name="name">François Villeroy de Galhau</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Banque de France</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: France</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'FR')]"/>
             <field name="source_url">https://www.banque-france.fr/en/about-banque-de-france/organisation/governor</field>
@@ -269,7 +248,6 @@
             <field name="name">Frank-Walter Steinmeier</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Germany</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Germany</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'DE')]"/>
             <field name="source_url">https://www.bundespraesident.de/EN/Home/home_node.html</field>
@@ -281,7 +259,6 @@
             <field name="name">Friedrich Merz</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Germany</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Germany</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'DE')]"/>
             <field name="source_url">https://www.bundesregierung.de/breg-en</field>
@@ -293,7 +270,6 @@
             <field name="name">Gabriel Galipolo</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Central Bank of Brazil</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Brazil</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'BR')]"/>
             <field name="source_url">https://www.reuters.com/world/americas/brazil-central-bank-still-sees-signs-economic-resilience-says-governor-2025-09-29/</field>
@@ -305,7 +281,6 @@
             <field name="name">Giorgia Meloni</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Italy</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Italy</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'IT')]"/>
             <field name="source_url">https://www.governo.it/en/president</field>
@@ -317,7 +292,6 @@
             <field name="name">Jerome H. Powell (Chair, Federal Reserve)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Federal Reserve</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: United States of America</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'US')]"/>
             <field name="source_url">https://www.federalreserve.gov/newsevents/speech/powell20251014a.htm</field>
@@ -329,7 +303,6 @@
             <field name="name">Joachim Nagel (President, Deutsche Bundesbank)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Deutsche Bundesbank</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Germany</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'DE')]"/>
             <field name="source_url">https://www.bundesbank.de/en/bundesbank/organisation/executive-board/joachim-nagel-882238</field>
@@ -341,7 +314,6 @@
             <field name="name">Kazuo Ueda</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Bank of Japan</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Japan</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'JP')]"/>
             <field name="source_url">https://www.boj.or.jp/en/about/organization/policyboard/gv_ueda.htm</field>
@@ -353,7 +325,6 @@
             <field name="name">Keir Starmer</field>
             <field name="position">head_state</field>
             <field name="organization">Government of the United Kingdom</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: United Kingdom</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'GB')]"/>
             <field name="source_url">https://www.gov.uk/government/speeches/pms-remarks-at-the-coalition-of-the-willing-press-conference-24-october-2025</field>
@@ -365,7 +336,6 @@
             <field name="name">King Charles III</field>
             <field name="position">head_state</field>
             <field name="organization">Government of the United Kingdom</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: United Kingdom</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'GB')]"/>
             <field name="source_url">https://www.royal.uk/king-charles-iii</field>
@@ -377,7 +347,6 @@
             <field name="name">King Charles III (represented by Governor General)</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Canada</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Canada</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'CA')]"/>
             <field name="source_url">https://www.gg.ca/en</field>
@@ -389,7 +358,6 @@
             <field name="name">King Salman bin Abdulaziz Al Saud</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Saudi Arabia</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Saudi Arabia</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'SA')]"/>
             <field name="source_url">https://www.royalcourt.gov.sa/</field>
@@ -401,7 +369,6 @@
             <field name="name">Lee Jae-myung</field>
             <field name="position">head_state</field>
             <field name="organization">Government of the Republic of Korea</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Republic of Korea</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'KR')]"/>
             <field name="source_url">https://www.korea.net/Government/Administration/President-Lee-Jae-Myung</field>
@@ -413,7 +380,6 @@
             <field name="name">Lesetja Kganyago</field>
             <field name="position">central_bank_board</field>
             <field name="organization">South African Reserve Bank</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: South Africa</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'ZA')]"/>
             <field name="source_url">https://www.resbank.co.za/en/home/publications/publication-detail-pages/speeches/speeches-by-governors/2025/kganyago-cross-border-payments</field>
@@ -425,7 +391,6 @@
             <field name="name">Luiz Inacio Lula da Silva</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Brazil</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Brazil</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'BR')]"/>
             <field name="source_url">https://www.gov.br/planalto/en</field>
@@ -437,7 +402,6 @@
             <field name="name">Mark Carney</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Government of Canada</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Canada</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'CA')]"/>
             <field name="source_url">https://www.pm.gc.ca/en</field>
@@ -449,7 +413,6 @@
             <field name="name">Michele Bullock (Governor, Reserve Bank of Australia)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Reserve Bank of Australia</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Australia</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'AU')]"/>
             <field name="source_url">https://www.rba.gov.au/about-rba/our-people/michele-bullock.html</field>
@@ -461,7 +424,6 @@
             <field name="name">Mohammed bin Salman (Prime Minister)</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Saudi Arabia</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Saudi Arabia</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'SA')]"/>
             <field name="source_url">https://en.wikipedia.org/wiki/Mohammed_bin_Salman</field>
@@ -473,7 +435,6 @@
             <field name="name">Narendra Modi</field>
             <field name="position">head_state</field>
             <field name="organization">Government of India</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: India</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'IN')]"/>
             <field name="source_url">https://www.pmindia.gov.in/en/</field>
@@ -485,7 +446,6 @@
             <field name="name">Perry Warjiyo</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Bank Indonesia</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Indonesia</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'ID')]"/>
             <field name="source_url">https://www.bi.go.id/en/tentang-bi/bi-today/manajemen/anggota-dewan-gubernur/Pages/Perry-Warjiyo.aspx</field>
@@ -497,7 +457,6 @@
             <field name="name">Prabowo Subianto</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Indonesia</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Indonesia</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'ID')]"/>
             <field name="source_url">https://www.presidenri.go.id/</field>
@@ -509,7 +468,6 @@
             <field name="name">Recep Tayyip Erdogan</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Türkiye</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Türkiye</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'TR')]"/>
             <field name="source_url">https://www.tccb.gov.tr/en/</field>
@@ -521,7 +479,6 @@
             <field name="name">Rhee Chang-yong (Chang Yong Rhee)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Bank of Korea</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Republic of Korea</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'KR')]"/>
             <field name="source_url">https://www.bok.or.kr/eng/main/contents.do?menuNo=400243</field>
@@ -533,7 +490,6 @@
             <field name="name">Sanae Takaichi</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Japan</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Japan</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'JP')]"/>
             <field name="source_url">https://apnews.com/article/24b4a5e2a2b777139de66e38665ced0d</field>
@@ -545,7 +501,6 @@
             <field name="name">Sanjay Malhotra (Governor, RBI)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Reserve Bank of India</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: India</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'IN')]"/>
             <field name="source_url">https://www.reuters.com/world/india/india-can-weather-global-challenges-rbi-chief-says-2025-10-03/</field>
@@ -557,7 +512,6 @@
             <field name="name">Sebastien Lecornu</field>
             <field name="position">head_state</field>
             <field name="organization">Government of France</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: France</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'FR')]"/>
             <field name="source_url">https://www.ft.com/content/52c7ff7f-362a-4bc6-b4b8-03464fa3daf6</field>
@@ -569,7 +523,6 @@
             <field name="name">Sergio Mattarella</field>
             <field name="position">head_state</field>
             <field name="organization">Government of Italy</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Italy</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'IT')]"/>
             <field name="source_url">https://www.quirinale.it/page/ilpresidente_en</field>
@@ -581,7 +534,6 @@
             <field name="name">Tiff Macklem (Governor, Bank of Canada)</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Bank of Canada</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Canada</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'CA')]"/>
             <field name="source_url">https://www.bankofcanada.ca/profile/tiff-macklem/</field>
@@ -593,7 +545,6 @@
             <field name="name">Victoria Rodriguez Ceja</field>
             <field name="position">central_bank_board</field>
             <field name="organization">Bank of Mexico</field>
-            <field name="pep_type">foreign</field>
             <field name="notes">Country: Mexico</field>
             <field name="nationality" model="res.country" search="[('code', '=', 'MX')]"/>
             <field name="source_url">https://www.banxico.org.mx/getting-to-know-banco-de-mexico/d/%7B21563EA0-413B-5B69-AA4D-C529AA6251E9%7D.pdf</field>

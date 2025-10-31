@@ -68,7 +68,7 @@ class PEPPerson(models.Model):
         ('domestic', 'Domestic PEP'),
         ('foreign', 'Foreign PEP'),
         ('international', 'International Organization PEP')
-    ], string='PEP Type', required=True, tracking=True)
+    ], string='PEP Type', compute='_compute_pep_type', store=True, tracking=True)
     status = fields.Selection([
         ('active', 'Active'),
         ('former', 'Former PEP'),
@@ -148,6 +148,18 @@ class PEPPerson(models.Model):
         for record in self:
             if record.pep_type == 'international' and record.organization_type != 'international_org':
                 raise models.ValidationError('International PEPs must be associated with international organizations')
+
+    @api.depends('nationality', 'organization_type')
+    def _compute_pep_type(self):
+        company_country = self.env.company.country_id
+        for record in self:
+            if record.organization_type == 'international_org':
+                record.pep_type = 'international'
+            elif record.nationality and company_country and record.nationality == company_country:
+                record.pep_type = 'domestic'
+            else:
+                # If nationality or company country is not set, or they differ, default to foreign
+                record.pep_type = 'foreign'
     
     @api.constrains('name', 'nationality')
     def _check_mongolian_name_format(self):
@@ -159,7 +171,7 @@ class PEPPerson(models.Model):
         # - Cyrillic characters, spaces, and dots (for initials).
         # - A space, then a Latin name in parentheses.
         # This is more flexible to handle AI responses with initials.
-        mongolian_name_pattern = re.compile(r'^[\u0400-\u04FF\s\.]+\s\([\w\s\.]+\)$')
+        mongolian_name_pattern = re.compile(r'^[\u0400-\u04FF\s\.\-]+\s\([\w\s\.\-]+\)$')
         for record in self:
             if record.nationality.code == 'MN':
                 if not record.name or not mongolian_name_pattern.match(record.name):

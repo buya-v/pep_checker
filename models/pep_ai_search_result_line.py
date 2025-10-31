@@ -30,17 +30,18 @@ class PEPAISearchResultLine(models.TransientModel):
         if existing_pep:
             raise UserError(_("A PEP with a similar name ('%s') already exists in the database.", existing_pep.name))
 
-        # Create the new PEP Person record
-        pep_person = self.env['pep.person'].create({
+        pep_vals = {
             'name': self.name,
             'position': 'other', # Default to 'other' as AI provides free text
             'custom_position': self.specific_title,
             'organization': f"Government of {self.wizard_id.country_id.name}", # A sensible default
-            'pep_type': 'foreign' if self.wizard_id.country_id.code != 'MN' else 'domestic',
             'nationality': self.wizard_id.country_id.id,
             'notes': self.notes,
             'source': f"AI Search for '{self.wizard_id.position}' in {self.wizard_id.country_id.name} ({self.wizard_id.year})",
-        })
+        }
+
+        # Create the new PEP Person record
+        pep_person = self.env['pep.person'].create(pep_vals)
 
         self.is_created = True
 

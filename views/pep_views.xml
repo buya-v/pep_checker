@@ -50,7 +50,7 @@
                         <group>
                             <field name="date_of_birth"/>
                             <field name="nationality"/>
-                            <field name="pep_type"/>
+                            <field name="pep_type" readonly="1"/>
                             <field name="is_mongolian_pep" readonly="1"/>
                             <field name="status"/>
                         </group>
