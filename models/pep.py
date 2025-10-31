@@ -255,6 +255,48 @@ class PEPPerson(models.Model):
         # This will trigger the computation of next_review
         return True
 
+    @api.model
+    def _run_edd_review_scheduler(self):
+        """
+        Scheduled action to find high-risk PEPs needing an EDD review.
+        This method is intended to be called by an ir.cron job.
+        """
+        _logger.info("Running EDD review scheduler...")
+        peps_for_review = self.search([
+            ('risk_level', '=', 'high'),
+            ('edd_next_review', '<=', fields.Date.today()),
+            ('status', '=', 'active'),
+            ('edd_status', '!=', 'review_needed'), # Avoid creating duplicate activities
+        ])
+
+        if not peps_for_review:
+            _logger.info("No high-risk PEPs found for scheduled EDD review.")
+            return
+
+        _logger.info(f"Found {len(peps_for_review)} high-risk PEPs for EDD review.")
+
+        manager_group = self.env.ref('pep_checker.group_pep_manager', raise_if_not_found=False)
+        activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+
+        if not manager_group or not activity_type:
+            _logger.warning("PEP Manager group or 'To Do' activity type not found. Cannot assign review activities.")
+            return
+
+        for pep in peps_for_review:
+            pep.edd_status = 'review_needed'
+            # Create an activity for each manager in the group
+            for user in manager_group.users:
+                self.env['mail.activity'].create({
+                    'res_model_id': self.env['ir.model']._get(pep._name).id,
+                    'res_id': pep.id,
+                    'activity_type_id': activity_type.id,
+                    'summary': _('Enhanced Due Diligence Review Required'),
+                    'note': _('Please perform the scheduled EDD review for the high-risk PEP: %s.', pep.name),
+                    'user_id': user.id,
+                    'date_deadline': fields.Date.today(),
+                })
+        _logger.info("Successfully created EDD review activities for %d PEPs.", len(peps_for_review))
+
 class PEPRelationship(models.Model):
     _name = 'pep.relationship'
     _description = 'PEP Relationship'
