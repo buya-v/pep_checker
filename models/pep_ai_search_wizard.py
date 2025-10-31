@@ -14,9 +14,9 @@ class PEPAISearchWizard(models.TransientModel):
     _name = 'pep.ai.search.wizard'
     _description = 'PEP AI Search Wizard'
 
-    country_id = fields.Many2one('res.country', string='Country', required=True)
+    country_id = fields.Many2one('res.country', string='Country', required=True, default=lambda self: self.env.company.country_id)
     position = fields.Char(string='Position/Role', required=True, help="Enter a specific role, e.g., 'Minister of Finance', 'Central Bank Governor'.")
-    year = fields.Integer(string='Year', required=True, default=lambda self: fields.Date.today().year)
+    year = fields.Char(string='Year / Period', required=True, default='current', help="Enter a year (e.g., 2024), a range (e.g., 2020-2024), or a term (e.g., 'current').")
     result_line_ids = fields.One2many('pep.ai.search.result.line', 'wizard_id', string='Search Results')
 
     def action_search_pep_with_ai(self):
@@ -35,7 +35,7 @@ class PEPAISearchWizard(models.TransientModel):
         position_label = self.position
 
         prompt_parts = [
-            f"Please act as a compliance research expert. Find a list of individuals who held the position of '{position_label}' in the country '{self.country_id.name}' during the year {self.year}.",
+            f"Please act as a compliance research expert. Find a list of individuals who held the position of '{position_label}' in the country '{self.country_id.name}' during the period {self.year}.",
             "\nProvide the response as a single, clean JSON object with a key 'peps', which is an array of objects. Each object must have the following keys:",
             '- "name": (string) The full name of the person.',
             '- "specific_title": (string) Their specific title or role during that year (e.g., "Prime Minister", "Minister of Finance").',

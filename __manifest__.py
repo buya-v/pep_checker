@@ -16,7 +16,7 @@
     'license': 'LGPL-3',
     'depends': [
         'base',
-        'mail'
+        'mail',
     ],
     'external_dependencies': {
         'python': ['dateutil', 'google-generativeai', 'jellyfish'],

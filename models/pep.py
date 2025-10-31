@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, date
 import re
 import json
@@ -27,7 +28,7 @@ class PEPPerson(models.Model):
     _description = 'Politically Exposed Person'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _sql_constraints = [
-        ('name_dob_uniq', 'UNIQUE(name, date_of_birth)', 'A PEP person with this name and date of birth already exists.'),
+        ('name_dob_uniq', 'UNIQUE(name, date_of_birth)', _('A PEP person with this name and date of birth already exists.')),
     ]
 
     name = fields.Char(string='Full Name', required=True, tracking=True)
@@ -35,8 +36,6 @@ class PEPPerson(models.Model):
                                 help="Phonetic representation of the name for advanced searching.")
     date_of_birth = fields.Date(string='Date of Birth')
     nationality = fields.Many2one('res.country', string='Nationality', tracking=True, index=True)
-    is_mongolian_pep = fields.Boolean(string="Mongolian PEP", compute='_compute_is_mongolian_pep', store=True,
-                                     help="Indicates if the person is a PEP according to Mongolian law.")
     position = fields.Selection([
         # Positions based on Mongolian Law & FATF Recommendations
         ('head_state', 'Head of State/Government'),
@@ -147,7 +146,7 @@ class PEPPerson(models.Model):
     def _check_pep_type_consistency(self):
         for record in self:
             if record.pep_type == 'international' and record.organization_type != 'international_org':
-                raise models.ValidationError('International PEPs must be associated with international organizations')
+                raise ValidationError(_('International PEPs must be associated with international organizations.'))
 
     @api.depends('nationality', 'organization_type')
     def _compute_pep_type(self):
@@ -175,8 +174,8 @@ class PEPPerson(models.Model):
         for record in self:
             if record.nationality.code == 'MN':
                 if not record.name or not mongolian_name_pattern.match(record.name):
-                    raise models.ValidationError(
-                        "Invalid name format for a Mongolian PEP. The required format is 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)', for example: 'Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)'.")
+                    raise ValidationError(
+                        _("Invalid name format for a Mongolian PEP. The required format is 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)', for example: 'Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)'."))
 
     @api.depends('end_date', 'retention_period')
     def _compute_retention_end_date(self):
@@ -188,18 +187,6 @@ class PEPPerson(models.Model):
                 record.retention_end_date = date(record.end_date.year + record.retention_period, record.end_date.month, record.end_date.day)
             else:
                 record.retention_end_date = False
-
-    @api.depends('nationality', 'position')
-    def _compute_is_mongolian_pep(self):
-        # Define the specific positions that are considered PEPs under Mongolian Law
-        mongolian_pep_positions = [
-            'head_state',
-            'parliament',
-            'governor',
-        ]
-        for record in self:
-            is_mn_position = record.position in mongolian_pep_positions
-            record.is_mongolian_pep = is_mn_position
 
     @api.depends('pep_type', 'position', 'status', 'end_date')
     def _compute_risk_level(self):
@@ -213,7 +200,7 @@ class PEPPerson(models.Model):
                     record.risk_level = 'low'
                 else:
                     record.risk_level = 'medium'
-            elif record.is_mongolian_pep:
+            elif record.pep_type == 'domestic':
                 record.risk_level = 'high'
             elif record.pep_type == 'foreign':
                 record.risk_level = 'high'
@@ -324,9 +311,9 @@ class PEPRelationship(models.Model):
     def _check_relation_consistency(self):
         for record in self:
             if record.relationship_type == 'family' and not record.family_relation:
-                raise models.ValidationError('Family relation must be specified for family members')
+                raise ValidationError(_('Family relation must be specified for family members.'))
             if record.relationship_type == 'associate' and not record.association_type:
-                raise models.ValidationError('Association type must be specified for close associates')
+                raise ValidationError(_('Association type must be specified for close associates.'))
 
 class PEPScreening(models.Model):
     _name = 'pep.screening'
@@ -437,12 +424,12 @@ class PEPScreening(models.Model):
         # --- Step 2: If no internal match, proceed with AI screening ---
         _logger.info("No internal match found. Proceeding with AI screening for: %s", self.name)
         if not genai:
-            raise models.UserError("The 'google-generativeai' library is not installed. Please install it using: pip install google-generativeai")
+            raise UserError(_("The 'google-generativeai' library is not installed. Please install it using: pip install google-generativeai"))
 
         # Get API Key from Odoo's system parameters for security
         api_key = self.env['ir.config_parameter'].sudo().get_param('pep_checker.google_api_key')
         if not api_key:
-            raise models.UserError("Google AI API key is not configured. Please set 'pep_checker.google_api_key' in System Parameters.")
+            raise UserError(_("Google AI API key is not configured. Please set 'pep_checker.google_api_key' in System Parameters."))
 
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-2.5-flash')
@@ -495,10 +482,10 @@ class PEPScreening(models.Model):
 
         except json.JSONDecodeError:
             _logger.error("Failed to decode JSON from AI response: %s", response.text)
-            raise models.UserError(_("The AI returned a response that could not be processed as JSON. Please check the logs for the raw response. Raw response:\n\n%s", response.text))
+            raise UserError(_("The AI returned a response that could not be processed as JSON. Please check the logs for the raw response. Raw response:\n\n%s", response.text))
         except Exception as e:
             _logger.error("An error occurred during AI screening: %s", str(e))
-            raise models.UserError(f"An error occurred while contacting the AI service: {e}")
+            raise UserError(_("An error occurred while contacting the AI service: %s", e))
 
         self.screening_date = fields.Datetime.now()
         return True

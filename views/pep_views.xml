@@ -7,7 +7,6 @@
         <field name="arch" type="xml">
             <list string="PEP Persons">
                 <field name="name"/>
-                <field name="is_mongolian_pep"/>
                 <field name="position"/>
                 <field name="organization"/>
                 <field name="pep_type"/>
@@ -51,7 +50,6 @@
                             <field name="date_of_birth"/>
                             <field name="nationality"/>
                             <field name="pep_type" readonly="1"/>
-                            <field name="is_mongolian_pep" readonly="1"/>
                             <field name="status"/>
                         </group>
                         <group>
@@ -106,7 +104,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div name="o_chatter"/>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -199,11 +197,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div name="o_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -360,7 +354,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div name="o_chatter"/>
+                <chatter/>
             </form>
         </field>
     </record>
