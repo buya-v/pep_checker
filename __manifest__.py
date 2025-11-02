@@ -19,7 +19,7 @@
         'mail',
     ],
     'external_dependencies': {
-        'python': ['dateutil', 'google-generativeai', 'jellyfish'],
+        'python': ['dateutil', 'google-generativeai', 'jellyfish', 'openai', 'requests', 'beautifulsoup4'],
     },
     'data': [
         'security/pep_security.xml',

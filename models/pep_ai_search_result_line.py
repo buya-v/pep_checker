@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from datetime import date
 import re
 
 class PEPAISearchResultLine(models.TransientModel):
@@ -9,6 +10,8 @@ class PEPAISearchResultLine(models.TransientModel):
     wizard_id = fields.Many2one('pep.ai.search.wizard', string='Wizard', ondelete='cascade')
     name = fields.Char(string='Name', readonly=True)
     specific_title = fields.Char(string='Specific Title', readonly=True)
+    start_year = fields.Integer(string='Start Year', readonly=True)
+    end_year = fields.Integer(string='End Year', readonly=True)
     notes = fields.Text(string='Notes', readonly=True)
     is_created = fields.Boolean(string="PEP Created", default=False)
 
@@ -39,6 +42,12 @@ class PEPAISearchResultLine(models.TransientModel):
             'notes': self.notes,
             'source': f"AI Search for '{self.wizard_id.position}' in {self.wizard_id.country_id.name} ({self.wizard_id.year})",
         }
+
+        # Set start and end dates if the years are provided by the AI
+        if self.start_year:
+            pep_vals['start_date'] = str(self.start_year)
+        if self.end_year:
+            pep_vals['end_date'] = str(self.end_year)
 
         # Create the new PEP Person record
         pep_person = self.env['pep.person'].create(pep_vals)

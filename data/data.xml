@@ -40,8 +40,8 @@
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2017, 7, 10).date()"/>
-                <field name="end_date" eval="datetime(2021, 6, 25).date()"/>
+                <field name="start_date">2017</field>
+                <field name="end_date">2021</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">5th President of Mongolia.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Khaltmaagiin_Battulga</field>
@@ -52,8 +52,8 @@
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2009, 6, 18).date()"/>
-                <field name="end_date" eval="datetime(2017, 7, 10).date()"/>
+                <field name="start_date">2009</field>
+                <field name="end_date">2017</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">4th President of Mongolia. Also served as Prime Minister.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Tsakhiagiin_Elbegdorj</field>
@@ -64,8 +64,8 @@
                 <field name="position">head_state</field>
                 <field name="organization">Office of the President of Mongolia</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2005, 6, 24).date()"/>
-                <field name="end_date" eval="datetime(2009, 6, 18).date()"/>
+                <field name="start_date">2005</field>
+                <field name="end_date">2009</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">3rd President of Mongolia. Also served as Prime Minister.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Nambaryn_Enkhbayar</field>
@@ -77,8 +77,8 @@
                 <field name="position">head_state</field>
                 <field name="organization">Government of Mongolia</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2017, 10, 4).date()"/>
-                <field name="end_date" eval="datetime(2021, 1, 27).date()"/>
+                <field name="start_date">2017</field>
+                <field name="end_date">2021</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">Served as Prime Minister before becoming President.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Ukhnaagiin_Kh%C3%BCrels%C3%BCkh</field>
@@ -89,8 +89,8 @@
                 <field name="position">head_state</field>
                 <field name="organization">Government of Mongolia</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2016, 7, 7).date()"/>
-                <field name="end_date" eval="datetime(2017, 10, 4).date()"/>
+                <field name="start_date">2016</field>
+                <field name="end_date">2017</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">Former Prime Minister of Mongolia.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Jargaltulgyn_Erdenebat</field>
@@ -102,8 +102,8 @@
                 <field name="position">governor</field>
                 <field name="organization">Governor's Office of Ulaanbaatar</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2020, 10, 23).date()"/>
-                <field name="end_date" eval="datetime(2023, 12, 7).date()"/>
+                <field name="start_date">2020</field>
+                <field name="end_date">2023</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">Former Governor of the Capital City Ulaanbaatar.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Dolgors%C3%BCrengiin_Sumyaabazar</field>
@@ -114,8 +114,8 @@
                 <field name="position">governor</field>
                 <field name="organization">Governor's Office of Ulaanbaatar</field>
                 <field name="status">former</field>
-                <field name="start_date" eval="datetime(2019, 2, 27).date()"/>
-                <field name="end_date" eval="datetime(2020, 7, 8).date()"/>
+                <field name="start_date">2019</field>
+                <field name="end_date">2020</field>
                 <field name="nationality" model="res.country" search="[('code', '=', 'MN')]"/>
                 <field name="notes">Former Governor of the Capital City Ulaanbaatar.</field>
                 <field name="source_url">https://en.wikipedia.org/wiki/Sainbuyangiin_Amarsaikhan</field>

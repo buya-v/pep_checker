@@ -29,7 +29,9 @@
                 <header>
                     <button name="action_request_approval" string="Request Approval" 
                             type="object" class="oe_highlight"
-                            invisible="senior_approval_id"/>
+                            invisible="senior_approval_id or edd_status == 'completed'"/>
+                    <button name="action_edd_with_xacxom" string="EDD with xacxom"
+                            type="object" class="oe_highlight"/>
                     <button name="action_schedule_edd_review" string="Schedule EDD Review" 
                             type="object" class="oe_highlight"/>
                     <field name="edd_status" widget="statusbar"/>
@@ -75,7 +77,6 @@
                             <field name="senior_approval_id"/>
                             <field name="senior_approval_date" invisible="not senior_approval_id"/>
                             <field name="retention_period"/>
-                            <field name="retention_end_date"/>
                         </group>
                     </group>
                     <notebook>
@@ -232,6 +233,8 @@
             <list create="false" delete="false">
                 <field name="name" readonly="1"/>
                 <field name="specific_title" readonly="1"/>
+                <field name="start_year" readonly="1" widget="integer"/>
+                <field name="end_year" readonly="1" widget="integer"/>
                 <field name="notes" readonly="1"/>
                 <field name="is_created" invisible="1"/>
                 <button name="action_create_pep_person" type="object" string="Create PEP" class="btn-primary"
@@ -252,6 +255,10 @@
                         <field name="position"/>
                         <field name="year"/>
                     </group>
+                    <group string="AI Configuration">
+                        <field name="ai_provider"/>
+                        <field name="ai_model"/>
+                    </group>
                 </group>
                 <notebook>
                     <page string="Results" name="results_page">
@@ -269,6 +276,67 @@
     <record id="action_pep_ai_search" model="ir.actions.act_window"> 
         <field name="name">AI PEP Search</field>
         <field name="res_model">pep.ai.search.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Web Scraper Result Line Tree View -->
+    <record id="view_pep_web_scraper_result_line_tree" model="ir.ui.view">
+        <field name="name">pep.web.scraper.result.line.tree</field>
+        <field name="model">pep.web.scraper.result.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="declaration_year"/>
+                <field name="name"/>
+                <field name="position"/>
+                <field name="is_created" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Web Scraper Detail Wizard View -->
+    <record id="view_pep_web_scraper_detail_wizard_form" model="ir.ui.view">
+        <field name="name">pep.web.scraper.detail.wizard.form</field>
+        <field name="model">pep.web.scraper.detail.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Declaration Details">
+                <group>
+                    <field name="name"/>
+                    <field name="summary" nolabel="1" class="o_readonly_modifier"/>
+                </group>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Web Scraper Wizard -->
+    <record id="view_pep_web_scraper_wizard_form" model="ir.ui.view">
+        <field name="name">pep.web.scraper.wizard.form</field>
+        <field name="model">pep.web.scraper.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Web Scraper">
+                <group>
+                    <field name="max_pages"/>
+                    <field name="status"/>
+                </group>
+                <notebook>
+                    <page string="Results" name="results_page">
+                        <field name="result_line_ids" nolabel="1"/>
+                    </page>
+                </notebook>
+                <footer>
+                    <button string="Start Scraping" type="object" name="action_start_scraping" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pep_web_scraper" model="ir.actions.act_window">
+        <field name="name">Scrape Official PEP Source</field>
+        <field name="res_model">pep.web.scraper.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
@@ -447,6 +515,12 @@
               parent="menu_pep_root"
               action="action_pep_ai_search"
               sequence="40"/>
+
+    <menuitem id="menu_pep_web_scraper"
+              name="Scrape Official Source"
+              parent="menu_pep_root"
+              action="action_pep_web_scraper"
+              sequence="50"/>
 
     <!-- Compatibility aliases: create simple xmlid names that some clients may lookup -->
     <record id="pep_person_form_alias" model="ir.model.data">

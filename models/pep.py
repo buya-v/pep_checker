@@ -6,6 +6,13 @@ import json
 import logging
 
 try:
+    import requests
+    from bs4 import BeautifulSoup
+except ImportError:
+    requests = None
+    BeautifulSoup = None
+
+try:
     from dateutil.relativedelta import relativedelta
 except ImportError:
     relativedelta = None
@@ -21,6 +28,11 @@ except ImportError:
     jellyfish = None
 
 _logger = logging.getLogger(__name__)
+
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest',
+}
 
 
 class PEPPerson(models.Model):
@@ -73,8 +85,8 @@ class PEPPerson(models.Model):
         ('former', 'Former PEP'),
         ('deceased', 'Deceased'),
     ], string='Status', default='active', tracking=True)
-    start_date = fields.Date(string='Position Start Date', tracking=True, index=True)
-    end_date = fields.Date(string='Position End Date', tracking=True, index=True)
+    start_date = fields.Char(string='Position Start Year', tracking=True, index=True)
+    end_date = fields.Char(string='Position End Year', tracking=True, index=True)
     risk_level = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
@@ -127,9 +139,6 @@ class PEPPerson(models.Model):
     # Record retention tracking
     retention_period = fields.Integer(string='Record Retention Period (Years)', default=5,
                                   help="Minimum period in years to retain PEP records after relationship end")
-    retention_end_date = fields.Date(string='Retention End Date', 
-                                   compute='_compute_retention_end_date', store=True)
-
     active = fields.Boolean(default=True)
     last_checked = fields.Datetime(string='Last Checked', default=fields.Datetime.now, index=True)
     
@@ -177,29 +186,15 @@ class PEPPerson(models.Model):
                     raise ValidationError(
                         _("Invalid name format for a Mongolian PEP. The required format is 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)', for example: 'Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)'."))
 
-    @api.depends('end_date', 'retention_period')
-    def _compute_retention_end_date(self):
-        for record in self:
-            if record.end_date and record.retention_period > 0 and relativedelta:
-                record.retention_end_date = record.end_date + relativedelta(years=record.retention_period)
-            elif record.end_date and record.retention_period > 0:
-                # Fallback if dateutil is not available
-                record.retention_end_date = date(record.end_date.year + record.retention_period, record.end_date.month, record.end_date.day)
-            else:
-                record.retention_end_date = False
-
     @api.depends('pep_type', 'position', 'status', 'end_date')
     def _compute_risk_level(self):
         for record in self:
             if record.status == 'deceased':
                 record.risk_level = 'low'
             elif record.status == 'former':
-                # A former PEP may be considered lower risk after a certain period (e.g., 18 months)
-                # has passed since they left their position.
-                if record.end_date and relativedelta and (fields.Date.today() > record.end_date + relativedelta(months=18)):
-                    record.risk_level = 'low'
-                else:
-                    record.risk_level = 'medium'
+                # With text-based end dates, a precise calculation is not feasible.
+                # We'll classify all former PEPs as medium risk by default.
+                record.risk_level = 'medium'
             elif record.pep_type == 'domestic':
                 record.risk_level = 'high'
             elif record.pep_type == 'foreign':
@@ -253,6 +248,94 @@ class PEPPerson(models.Model):
         self.ensure_one()
         self.edd_last_review = fields.Date.today()
         # This will trigger the computation of next_review
+        return True
+
+    def action_edd_with_xacxom(self):
+        """
+        Performs EDD by scraping the official Mongolian source (xacxom.iaac.mn),
+        updating the PEP record with the findings, and refreshing monitoring dates.
+        """
+        self.ensure_one()
+        if not requests or not BeautifulSoup:
+            raise UserError(_("The 'requests' and 'beautifulsoup4' libraries are required. Please install them using: pip install requests beautifulsoup4"))
+
+        # Parse the Cyrillic name into patronymic (last_name) and given name (firstname)
+        cyrillic_name_part = self.name.split('(')[0].strip()
+        name_parts = cyrillic_name_part.split()
+        if len(name_parts) < 2:
+            raise UserError(_("The PEP's name '%s' does not seem to be in the 'Patronymic GivenName' format and cannot be searched automatically.", self.name))
+
+        search_url = "https://xacxom.iaac.mn/xacxom/search"
+        # Construct the payload with specific form fields
+        payload = {
+            'last_name': name_parts[0],
+            'first_name': " ".join(name_parts[1:]),
+        }
+
+        _logger.info("Verifying PEP '%s' against official source with search params: %s", self.name, payload)
+
+        try:
+            # The form uses a GET request, so we use 'params'
+            response = requests.get(search_url, params=payload, headers=HEADERS, timeout=30)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            raise UserError(_("Failed to connect to the official source website. Error: %s", e))
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        table = soup.find('table', class_='table')
+        scraped_data = []
+
+        if table:
+            rows = table.find_all('tr')
+            for row in rows[1:]:  # Skip header
+                cols = row.find_all('td')
+                if len(cols) >= 5:
+                    # Corrected column mapping based on HTML sample
+                    declaration_year = cols[2].text.strip() if len(cols) > 2 else ''
+                    last_name = cols[3].text.strip() if len(cols) > 3 else ''
+                    first_name = cols[4].text.strip() if len(cols) > 4 else ''
+                    full_name = f"{last_name} {first_name}"
+                    organization = cols[5].text.strip() if len(cols) > 5 else ''
+                    position = cols[6].text.strip() if len(cols) > 6 else ''
+                    aid_input = cols[1].find('input', class_='aid_number') if len(cols) > 1 else None
+                    aid_number = aid_input['value'] if aid_input else ''
+                    scraped_data.append({
+                        'name': full_name,
+                        'position': position,
+                        'organization': organization,
+                        'declaration_year': declaration_year,
+                        'aid_number': aid_number,
+                    })
+
+        if scraped_data:
+            update_vals = {
+                'last_checked': fields.Datetime.now(),
+                'edd_last_review': fields.Date.today(),
+                'source': 'https://xacxom.iaac.mn',
+            }
+
+            # Calculate min/max years for the position timeline
+            declaration_years = [int(entry['declaration_year']) for entry in scraped_data if entry.get('declaration_year', '').isdigit()]
+            if declaration_years:
+                update_vals['start_date'] = str(min(declaration_years))
+                update_vals['end_date'] = str(max(declaration_years))
+
+            # Format the scraped data into a readable summary for the notes field
+            summary_lines = [
+                "\n--- Official Source Verification (xacxom.iaac.mn) ---",
+                f"Verification Date: {fields.Date.today()}",
+                f"Found {len(scraped_data)} declaration(s) for '{self.name}':"
+            ]
+            for entry in sorted(scraped_data, key=lambda x: x.get('declaration_year', '0'), reverse=True):
+                summary_lines.append(
+                    f"- Year: {entry.get('declaration_year', 'N/A')}, Position: {entry.get('position', 'N/A')}, Organization: {entry.get('organization', 'N/A')}"
+                )
+            
+            update_vals['notes'] = (self.notes + "\n" if self.notes else "") + "\n".join(summary_lines)
+            
+            self.write(update_vals)
+            _logger.info("Appended verification summary to notes for PEP %s", self.name)
+
         return True
 
     @api.model

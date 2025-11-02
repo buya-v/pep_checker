@@ -7,3 +7,6 @@ access_pep_relationship_user,PEP Relationship User Access,model_pep_relationship
 access_pep_relationship_manager,PEP Relationship Manager Access,model_pep_relationship,pep_checker.group_pep_manager,1,1,1,1
 access_pep_ai_search_result_line_user,PEP AI Search Result Line User Access,model_pep_ai_search_result_line,pep_checker.group_pep_user,1,1,1,1
 access_pep_ai_search_wizard_user,PEP AI Search Wizard User Access,model_pep_ai_search_wizard,pep_checker.group_pep_user,1,1,1,1
+access_pep_web_scraper_wizard_user,PEP Web Scraper Wizard User Access,model_pep_web_scraper_wizard,pep_checker.group_pep_user,1,1,1,1
+access_pep_web_scraper_result_line_user,PEP Web Scraper Result Line User Access,model_pep_web_scraper_result_line,pep_checker.group_pep_user,1,1,1,1
+access_pep_web_scraper_detail_wizard_user,PEP Web Scraper Detail Wizard User Access,model_pep_web_scraper_detail_wizard,pep_checker.group_pep_user,1,1,1,1
