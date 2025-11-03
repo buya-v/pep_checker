@@ -10,8 +10,9 @@ class PEPAISearchResultLine(models.TransientModel):
     wizard_id = fields.Many2one('pep.ai.search.wizard', string='Wizard', ondelete='cascade')
     name = fields.Char(string='Name', readonly=True)
     specific_title = fields.Char(string='Specific Title', readonly=True)
-    start_year = fields.Integer(string='Start Year', readonly=True)
-    end_year = fields.Integer(string='End Year', readonly=True)
+    start_year = fields.Char(string='Start Year', readonly=True)
+    end_year = fields.Char(string='End Year', readonly=True)
+    birth_year = fields.Char(string='Birth Year', readonly=True)
     notes = fields.Text(string='Notes', readonly=True)
     is_created = fields.Boolean(string="PEP Created", default=False)
 
@@ -48,6 +49,10 @@ class PEPAISearchResultLine(models.TransientModel):
             pep_vals['start_date'] = str(self.start_year)
         if self.end_year:
             pep_vals['end_date'] = str(self.end_year)
+
+        # Set date of birth if the year is provided by the AI
+        if self.birth_year:
+            pep_vals['date_of_birth'] = date(int(self.birth_year), 1, 1)
 
         # Create the new PEP Person record
         pep_person = self.env['pep.person'].create(pep_vals)

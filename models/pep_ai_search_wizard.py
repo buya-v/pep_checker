@@ -71,6 +71,7 @@ class PEPAISearchWizard(models.TransientModel):
             '- "specific_title": (string) Their specific title or role during that period (e.g., "Prime Minister", "Minister of Finance").',
             '- "start_year": (integer) The year the person started this specific position.',
             '- "end_year": (integer or null) The year the person ended this specific position. If they are still in the position, return null.',
+            '- "birth_year": (integer or null) The year of birth of the person. Return null if not found.',
             '- "notes": (string) A brief note about their tenure or significance.',
             "\nCRITICAL FORMATTING RULE FOR 'name' FIELD:",
             "If the country is Mongolia, the name MUST be in the format 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)'.",
@@ -140,8 +141,9 @@ class PEPAISearchWizard(models.TransientModel):
                 'name': pep.get('name'),
                 'specific_title': pep.get('specific_title'),
                 'notes': pep.get('notes'),
-                'start_year': pep.get('start_year'),
-                'end_year': pep.get('end_year'),
+                'start_year': str(pep.get('start_year')) if pep.get('start_year') else False,
+                'end_year': str(pep.get('end_year')) if pep.get('end_year') else False,
+                'birth_year': str(pep.get('birth_year')) if pep.get('birth_year') else False,
             } for pep in peps]
             self.result_line_ids = [(0, 0, vals) for vals in vals_list]
         else:

@@ -233,8 +233,9 @@
             <list create="false" delete="false">
                 <field name="name" readonly="1"/>
                 <field name="specific_title" readonly="1"/>
-                <field name="start_year" readonly="1" widget="integer"/>
-                <field name="end_year" readonly="1" widget="integer"/>
+                <field name="start_year" readonly="1"/>
+                <field name="end_year" readonly="1"/>
+                <field name="birth_year" readonly="1"/>
                 <field name="notes" readonly="1"/>
                 <field name="is_created" invisible="1"/>
                 <button name="action_create_pep_person" type="object" string="Create PEP" class="btn-primary"
