@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- PEP Position AI Search Result Line List View -->
+    <record id="view_pep_position_ai_search_result_line_tree" model="ir.ui.view">
+        <field name="name">pep.position.ai.search.result.line.tree</field>
+        <field name="model">pep.position.ai.search.result.line</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" editable="bottom">
+                <field name="position_title"/>
+                <field name="suggested_category"/>
+                <field name="notes"/>
+                <field name="is_registered" invisible="1"/>
+                <button name="action_register_position" type="object" string="Register Position" class="btn-primary"
+                        invisible="is_registered"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PEP Position AI Search Wizard View -->
+    <record id="view_pep_position_ai_search_wizard_form" model="ir.ui.view">
+        <field name="name">pep.position.ai.search.wizard.form</field>
+        <field name="model">pep.position.ai.search.wizard</field>
+        <field name="arch" type="xml">
+            <form string="AI Position Screening">
+                <group>
+                    <group>
+                        <field name="country_id"/>
+                        <field name="year"/>
+                    </group>
+                    <group string="AI Configuration">
+                        <field name="ai_provider"/>
+                        <field name="ai_model"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Results" name="results_page">
+                        <field name="result_line_ids" nolabel="1"/>
+                    </page>
+                </notebook>
+                <footer>
+                    <button string="Search with AI" type="object" name="action_search_positions_with_ai" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pep_position_ai_search" model="ir.actions.act_window">
+        <field name="name">Position AI Screening</field>
+        <field name="res_model">pep.position.ai.search.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_pep_position_ai_search"
+              name="Position AI Screening"
+              parent="menu_pep_root"
+              action="action_pep_position_ai_search"
+              sequence="45"/>
+
+</odoo>

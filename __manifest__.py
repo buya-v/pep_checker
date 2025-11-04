@@ -1,7 +1,7 @@
 {
     'name': 'Politically Exposed Person (PEP) Management',
     'version': '18.0.1.0.0',
-    'category': 'Accounting/Accounting',
+    'category': 'Compliance',
     'summary': 'Manage and screen for Politically Exposed Persons (PEPs) for AML/KYC compliance.',
     'sequence': -100,
     'description': """
@@ -17,13 +17,17 @@
     'depends': [
         'base',
         'mail',
+        'queue_job', # Added for background scraping jobs
     ],
     'external_dependencies': {
         'python': ['dateutil', 'google-generativeai', 'jellyfish', 'openai', 'requests', 'beautifulsoup4'],
     },
     'data': [
+        'data/ai_prompts.xml',
         'security/pep_security.xml',
-        'security/ir.model.access.csv',
+        'security/ir.model.access.csv', # This should be listed only once
+        'views/pep_position_template_views.xml', # This file is correct
+        'views/pep_position_ai_search_views.xml',
         'views/pep_views.xml',
         'data/data.xml',
     ],

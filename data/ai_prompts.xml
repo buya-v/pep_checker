@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <template id="ai_pep_list_search_prompt" name="AI PEP List Search Prompt">
+Please act as a compliance research expert. Find a list of individuals who held the position of '<t t-esc="position"/>' in the country '<t t-esc="country_name"/>' during the period <t t-esc="year"/>.
+
+Provide the response as a single, clean JSON object with a key 'peps', which is an array of objects. Each object must have the following keys:
+- "name": (string) The full name of the person.
+- "specific_title": (string) Their specific title or role during that period (e.g., "Prime Minister", "Minister of Finance").
+- "start_year": (integer) The year the person started this specific position.
+- "end_year": (integer or null) The year the person ended this specific position. If they are still in the position, return null.
+- "birth_year": (integer or null) The year of birth of the person. Return null if not found.
+- "notes": (string) A brief note about their tenure or significance.
+
+CRITICAL FORMATTING RULE FOR 'name' FIELD:
+If the country is Mongolia, the name MUST be in the format 'Эцэг/эхийн нэр Өөрийн нэр (Firstname Surname)'.
+You must expand any initials. For example:
+  - If you find 'Д. Ганзориг (D. Ganzorig)', you must research and return the full name like 'Дамдин Ганзориг (Ganzorig Damdin)'.
+  - If you find 'Ухнаа Хүрэлсүх (Khurelsukh Ukhnaa)', this format is correct.
+For all other countries, provide the name as commonly written.
+
+If you cannot find any information, return a JSON object with an empty 'peps' array.
+        </template>
+
+        <template id="ai_pep_position_search_prompt" name="AI PEP Position Search Prompt">
+Please act as a legal and compliance expert specializing in Anti-Money Laundering (AML) regulations.
+
+Your task is to identify key Politically Exposed Person (PEP) positions for the country of '<t t-esc="country_name"/>' for the year <t t-esc="year"/>.
+
+Provide the response as a single, clean JSON object with a key 'positions', which is an array of objects. Each object must have the following keys:
+- "position_title": (string) The specific, official title of the position (e.g., "Minister of Finance", "Chief Justice of the Supreme Court").
+- "category": (string) The most appropriate category for this position from the following list: <t t-esc="valid_categories"/>. You MUST use one of these exact values.
+- "notes": (string) A brief explanation of why this position is considered a PEP role (e.g., "Controls national budget," "Highest judicial authority").
+
+Focus on the most senior and influential roles in the executive, legislative, judicial, military, and state-owned enterprise sectors.
+
+Example for "United States":
+{"positions": [{"position_title": "President of the United States", "category": "head_state", "notes": "Head of state and government, commander-in-chief of the armed forces."}]}
+
+If you cannot find any information, return a JSON object with an empty 'positions' array.
+        </template>
+    </data>
+</odoo>

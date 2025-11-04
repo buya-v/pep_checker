@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- PEP Position Template Tree View -->
+    <record id="view_pep_position_template_tree" model="ir.ui.view">
+        <field name="name">pep.position.template.tree</field>
+        <field name="model">pep.position.template</field>
+        <field name="arch" type="xml">
+            <list string="PEP Position Templates">
+                <field name="name"/>
+                <field name="category"/>
+                <field name="year"/>
+                <field name="country_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PEP Position Template Form View -->
+    <record id="view_pep_position_template_form" model="ir.ui.view">
+        <field name="name">pep.position.template.form</field>
+        <field name="model">pep.position.template</field>
+        <field name="arch" type="xml">
+            <form string="PEP Position Template">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Position Title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category"/>
+                            <field name="country_id"/>
+                            <field name="year"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Additional notes about this position..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PEP Position Template Search View -->
+    <record id="view_pep_position_template_search" model="ir.ui.view">
+        <field name="name">pep.position.template.search</field>
+        <field name="model">pep.position.template</field>
+        <field name="arch" type="xml">
+            <search string="Search PEP Position Templates">
+                <field name="name"/>
+                <field name="category"/>
+                <field name="country_id"/>
+                <field name="year"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Country" name="group_by_country" context="{'group_by': 'country_id'}"/>
+                    <filter string="Category" name="group_by_category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for PEP Position Templates -->
+    <record id="action_pep_position_template" model="ir.actions.act_window">
+        <field name="name">Position Templates</field>
+        <field name="res_model">pep.position.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_pep_position_template_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PEP Position Template.
+            </p><p>
+                You can use the "Position AI Screening" tool to automatically generate templates.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_pep_position_templates"
+              name="Position Templates"
+              parent="menu_pep_main"
+              action="action_pep_position_template"
+              sequence="30"/>
+
+</odoo>

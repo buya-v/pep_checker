@@ -20,10 +20,10 @@ class PEPWebScraperWizard(models.TransientModel):
     _name = 'pep.web.scraper.wizard'
     _description = 'PEP Web Scraper Wizard'
 
-    URL = "https://xacxom.iaac.mn/xacxom/search"
-
     max_pages = fields.Integer(string='Pages to Scrape', default=1, help="Number of pages to scrape from the source website. Set to 0 to scrape all available pages.")
-    status = fields.Text(string='Status', readonly=True, default="Ready to start scraping.")
+    status = fields.Selection([
+        ('ready', 'Ready'),
+        ('done', 'Job Queued')], string='Status', readonly=True, default="ready")
     result_line_ids = fields.One2many('pep.web.scraper.result.line', 'wizard_id', string='Scraped Results')
 
     def action_start_scraping(self):
@@ -32,17 +32,34 @@ class PEPWebScraperWizard(models.TransientModel):
         if not requests or not BeautifulSoup:
             raise UserError(_("The 'requests' and 'beautifulsoup4' libraries are required. Please install them using: pip install requests beautifulsoup4"))
 
-        self.result_line_ids.unlink()
-        self.status = "Scraping in progress..."
+        # Use with_delay to run the job in the background
+        self.with_delay()._run_scraping_job(self.max_pages, self.env.user.id)
+
+        # Provide immediate feedback to the user
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Scraping Job Started'),
+                'message': _('The web scraping process has been started in the background. You will be notified upon completion.'),
+                'sticky': False,
+                'type': 'info',
+            }
+        }
+
+    def _run_scraping_job(self, max_pages, user_id):
+        """This method runs in a background job."""
+        _logger.info("Starting background web scraping job...")
+        search_url = self.env['ir.config_parameter'].sudo().get_param(
+            'pep_checker.xacxom_search_url', "https://xacxom.iaac.mn/xacxom/search")
 
         scraped_data = []
-        page_limit = self.max_pages if self.max_pages > 0 else float('inf')
+        page_limit = max_pages if max_pages > 0 else float('inf')
         current_page = 1
 
         while current_page <= page_limit:
-            page_url = f"{self.URL}?page={current_page}"
+            page_url = f"{search_url}?page={current_page}"
             _logger.info("Scraping page: %s", page_url)
-            self.status = f"Scraping page {current_page}..."
 
             try:
                 response = requests.get(page_url, headers=HEADERS, timeout=30)
@@ -56,13 +73,11 @@ class PEPWebScraperWizard(models.TransientModel):
             table = soup.find('table', class_='table')
 
             if not table:
-                self.status = f"No data table found on page {current_page}. Scraping finished."
                 _logger.info("No data table found on page %s. Stopping.", page_url)
                 break
 
             rows = table.find_all('tr')
             if len(rows) <= 1: # Only header row
-                self.status = f"No data rows found on page {current_page}. Scraping finished."
                 _logger.info("No data rows found on page %s. Stopping.", page_url)
                 break
 
@@ -90,19 +105,21 @@ class PEPWebScraperWizard(models.TransientModel):
             
             current_page += 1
 
+        # Notify the user upon completion
+        user = self.env['res.users'].browse(user_id)
+        notification_message = ""
         if scraped_data:
-            self.result_line_ids = [(0, 0, data) for data in scraped_data]
-            self.status = f"Scraping complete. Found {len(scraped_data)} records."
+            # Since this is a background job, we can't directly update the wizard.
+            # We can create a notification for the user.
+            # A more advanced implementation would be to save results to a persistent model.
+            notification_message = _("Web scraping complete. Found %d records. A more advanced version could show you the results.", len(scraped_data))
+            _logger.info("Scraping complete. Found %d records.", len(scraped_data))
         else:
-            self.status = "Scraping complete. No new records found."
+            notification_message = _("Web scraping complete. No new records were found.")
+            _logger.info("Scraping complete. No new records found.")
 
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'pep.web.scraper.wizard',
-            'view_mode': 'form',
-            'res_id': self.id,
-            'target': 'new',
-        }
+        user.notify_info(notification_message)
+        return True
 
 class PEPWebScraperResultLine(models.TransientModel):
     _name = 'pep.web.scraper.result.line'

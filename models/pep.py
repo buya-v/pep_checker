@@ -85,8 +85,8 @@ class PEPPerson(models.Model):
         ('former', 'Former PEP'),
         ('deceased', 'Deceased'),
     ], string='Status', default='active', tracking=True)
-    start_date = fields.Char(string='Position Start Year', tracking=True, index=True)
-    end_date = fields.Char(string='Position End Year', tracking=True, index=True)
+    start_date = fields.Integer(string='Position Start Year', tracking=True, index=True)
+    end_date = fields.Integer(string='Position End Year', tracking=True, index=True)
     risk_level = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
@@ -192,9 +192,12 @@ class PEPPerson(models.Model):
             if record.status == 'deceased':
                 record.risk_level = 'low'
             elif record.status == 'former':
-                # With text-based end dates, a precise calculation is not feasible.
-                # We'll classify all former PEPs as medium risk by default.
-                record.risk_level = 'medium'
+                # If a PEP has been out of office for more than 5 years, risk can be lowered.
+                # This requires end_date to be set.
+                if record.end_date and (date.today().year - record.end_date) > 5:
+                    record.risk_level = 'low'
+                else:
+                    record.risk_level = 'medium'
             elif record.pep_type == 'domestic':
                 record.risk_level = 'high'
             elif record.pep_type == 'foreign':
@@ -250,6 +253,10 @@ class PEPPerson(models.Model):
         # This will trigger the computation of next_review
         return True
 
+    def _get_xacxom_search_url(self):
+        return self.env['ir.config_parameter'].sudo().get_param(
+            'pep_checker.xacxom_search_url', "https://xacxom.iaac.mn/xacxom/search")
+
     def action_edd_with_xacxom(self):
         """
         Performs EDD by scraping the official Mongolian source (xacxom.iaac.mn),
@@ -265,7 +272,7 @@ class PEPPerson(models.Model):
         if len(name_parts) < 2:
             raise UserError(_("The PEP's name '%s' does not seem to be in the 'Patronymic GivenName' format and cannot be searched automatically.", self.name))
 
-        search_url = "https://xacxom.iaac.mn/xacxom/search"
+        search_url = self._get_xacxom_search_url()
         # Construct the payload with specific form fields
         payload = {
             'last_name': name_parts[0],
@@ -317,8 +324,8 @@ class PEPPerson(models.Model):
             # Calculate min/max years for the position timeline
             declaration_years = [int(entry['declaration_year']) for entry in scraped_data if entry.get('declaration_year', '').isdigit()]
             if declaration_years:
-                update_vals['start_date'] = str(min(declaration_years))
-                update_vals['end_date'] = str(max(declaration_years))
+                update_vals['start_date'] = min(declaration_years)
+                update_vals['end_date'] = max(declaration_years)
 
             # Format the scraped data into a readable summary for the notes field
             summary_lines = [
@@ -367,17 +374,16 @@ class PEPPerson(models.Model):
 
         for pep in peps_for_review:
             pep.edd_status = 'review_needed'
-            # Create an activity for each manager in the group
-            for user in manager_group.users:
-                self.env['mail.activity'].create({
-                    'res_model_id': self.env['ir.model']._get(pep._name).id,
-                    'res_id': pep.id,
-                    'activity_type_id': activity_type.id,
-                    'summary': _('Enhanced Due Diligence Review Required'),
-                    'note': _('Please perform the scheduled EDD review for the high-risk PEP: %s.', pep.name),
-                    'user_id': user.id,
-                    'date_deadline': fields.Date.today(),
-                })
+            # Create a single activity for the manager group (no specific user assigned)
+            self.env['mail.activity'].create({
+                'res_model_id': self.env['ir.model']._get(pep._name).id,
+                'res_id': pep.id,
+                'activity_type_id': activity_type.id,
+                'summary': _('Enhanced Due Diligence Review Required'),
+                'note': _('Please perform the scheduled EDD review for the high-risk PEP: %s.', pep.name),
+                'user_id': False, # Unassigned, will be visible to the group
+                'date_deadline': fields.Date.today(),
+            })
         _logger.info("Successfully created EDD review activities for %d PEPs.", len(peps_for_review))
 
 class PEPRelationship(models.Model):

@@ -11,3 +11,7 @@ access_pep_web_scraper_wizard_user,PEP Web Scraper Wizard User Access,model_pep_
 access_pep_web_scraper_result_line_user,PEP Web Scraper Result Line User Access,model_pep_web_scraper_result_line,pep_checker.group_pep_user,1,1,1,1
 access_pep_web_scraper_detail_wizard_user,PEP Web Scraper Detail Wizard User Access,model_pep_web_scraper_detail_wizard,pep_checker.group_pep_user,1,1,1,1
 access_pep_approval_wizard_user,PEP Approval Wizard User Access,model_pep_approval_wizard,pep_checker.group_pep_user,1,1,1,1
+access_pep_position_template_user,PEP Position Template User Access,model_pep_position_template,pep_checker.group_pep_user,1,1,1,0
+access_pep_position_template_manager,PEP Position Template Manager Access,model_pep_position_template,pep_checker.group_pep_manager,1,1,1,1
+access_pep_position_ai_search_wizard_user,PEP Position AI Search Wizard User Access,model_pep_position_ai_search_wizard,pep_checker.group_pep_user,1,1,1,1
+access_pep_position_ai_search_result_line_user,PEP Position AI Search Result Line User Access,model_pep_position_ai_search_result_line,pep_checker.group_pep_user,1,1,1,1
